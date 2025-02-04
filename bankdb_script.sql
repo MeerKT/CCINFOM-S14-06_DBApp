@@ -110,7 +110,14 @@ CONSTRAINT `fk_receiver_account`
     ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
-/*acc-trans-his INSERT INTO here*/
+INSERT INTO `bank_db`.`account_transaction_history`
+(`amount`, `transaction_date`, `transaction_status`, `sender_acc_ID`, `receiver_acc_ID`)
+VALUES
+(5000.00, 	'2024-01-15', 'Successful', 1, 2),
+(2500.50, 	'2024-01-20', 'Pending', 	3, 4),
+(100000.00, '2024-02-10', 'Successful', 5, 1),
+(750.25, 	'2024-02-15', 'Failed', 	2, 3),
+(20000.00, 	'2024-03-01', 'Cancelled', 	4, 5);
 
 DROP TABLE IF EXISTS `loan_transaction_history`;
 CREATE TABLE IF NOT EXISTS `bank_db`.`Loan_Transaction_History` (
@@ -137,7 +144,33 @@ CONSTRAINT `fk_borrower_account`
     ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
-/*loan-trans-his INSERT INTO here*/
+INSERT INTO `bank_db`.`loan_transaction_history`
+(`loan_amount`, `loan_transaction_date`, `loan_transaction_status`, `lender_acc_ID`, `borrower_acc_ID`)
+VALUES
+(500000.00,  '2023-12-01', 'Successful', 1, 2),
+(75000.00, 	 '2023-12-15', 'Pending', 	 3, 4),
+(2500000.00, '2024-01-10', 'Successful', 5, 1),
+(60000.00, 	 '2024-01-25', 'Failed', 	 2, 3),
+(120000.00,  '2024-02-05', 'Cancelled',  4, 5);
+
+DROP TABLE IF EXISTS `Loan_Options`;
+CREATE TABLE IF NOT EXISTS `bank_db`.`Loan_Options` (
+`loan_option_ID` INT NOT NULL, 
+`loan_option_type` ENUM('Business Loan', 'Personal Loan', 'Special Loan') NOT NULL,
+`interest_rate` FLOAT NOT NULL,
+`loan_duration_month` INT NOT NULL,
+`max_loan_amt` FLOAT NOT NULL,
+`min_loan_amt` FLOAT NOT NULL,
+
+PRIMARY KEY(`loan_option_ID`))
+ENGINE = InnoDB;
+
+INSERT INTO `bank_db`.`loan_options`
+(`loan_option_ID`, `loan_option_type`, `interest_rate`, `loan_duration_month`, `max_loan_amt`, `min_loan_amt`)
+VALUES
+(1, 'Business Loan', 5.5, 24, 5000000.00, 50000.00),
+(2, 'Personal Loan', 7.0, 12, 1500000.00, 25000.00),
+(3, 'Special Loan', 3.2, 36, 10000000.00, 100000.00);
 
 DROP TABLE IF EXISTS `availed_loans`;
 CREATE TABLE IF NOT EXISTS `bank_db`.`Availed_Loans` (
@@ -155,8 +188,8 @@ CREATE TABLE IF NOT EXISTS `bank_db`.`Availed_Loans` (
 `loan_status` ENUM('Fully Paid', 'Unpaid', 'Ongoing') NOT NULL,
 `customer_ID` INT NOT NULL,
 
-UNIQUE INDEX `loan_option_ID_UNIQUE` (`loan_option_ID` ASC) VISIBLE, 
-
+UNIQUE INDEX `loan_ID_UNIQUE` (`loan_ID` ASC) VISIBLE, 
+PRIMARY KEY (`loan_ID`),
 
 CONSTRAINT `fk_customer_ID`
     FOREIGN KEY (`customer_ID`) 
@@ -165,22 +198,15 @@ CONSTRAINT `fk_customer_ID`
     ON UPDATE CASCADE)
     ENGINE = InnoDB;
 
-/* availed loans INSERT INTO here*/
+INSERT INTO `bank_db`.`availed_loans`
+(`loan_ID`, `loan_option_ID`, `principal_amt`, `fmpa`, `spa`, 
+	`interest_amortization`, `principal_balance`, `interest_balance`, 
+	`start_date`, `end_date`, `month_payment_day`, `loan_status`, `customer_ID`)
+VALUES
+(1, 1, 1000000.00, 50000.00, 40000.00, 10000.00, 800000.00, 200000.00, '2024-01-01', '2025-01-01', '2024-02-01', 'Ongoing', 1),
+(2, 2, 250000.00, 20000.00, 15000.00, 5000.00, 175000.00, 75000.00, '2024-01-15', '2025-01-15', '2024-02-15', 'Ongoing', 2),
+(3, 3, 5000000.00, 200000.00, 180000.00, 20000.00, 3500000.00, 1500000.00, '2023-12-10', '2024-12-10', '2024-01-10', 'Unpaid', 3),
+(4, 1, 300000.00, 25000.00, 20000.00, 5000.00, 200000.00, 100000.00, '2024-02-05', '2025-02-05', '2024-03-05', 'Ongoing', 4),
+(5, 2, 1500000.00, 100000.00, 90000.00, 10000.00, 900000.00, 600000.00, '2023-11-20', '2024-11-20', '2023-12-20', 'Fully Paid', 5);
 
-DROP TABLE IF EXISTS `Loan_Options`;
-CREATE TABLE IF NOT EXISTS `bank_db`.`Loan_Options` (
-`loan_option_ID` INT NOT NULL, 
-`loan_option_type` ENUM('Business Loan', 'Personal Loan', 'Special Loan') NOT NULL,
-`interest_rate` FLOAT NOT NULL,
-`loan_duration_month` INT NOT NULL,
-`max_loan_amt` FLOAT NOT NULL,
-`min_loan_amt` FLOAT NOT NULL,
 
-CONSTRAINT `fk_loan_option_ID`
-    FOREIGN KEY (`loan_option_ID`) 
-    REFERENCES `bank_db`.`Availed_Loans` (`loan_option_ID`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE)
-ENGINE = InnoDB;
-
-/*loan options INSERT ONTO here*/
