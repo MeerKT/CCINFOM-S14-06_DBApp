@@ -43,8 +43,8 @@ VALUES
 (11, 'Bokoen',  'Braun',      '1994-12-19', '09563780739', 'denmark_bokoen1@gmail.com'); 
 /*
 (12, 'Enzo',    'Abanes',     '2003-10-31', '09563171150', 'enzoabanes03@gmail.com'),
-(13, 'Althea',  'Brillantes', '200 '),
-(14, 'Jullian', 'Cruz',       '200 '),
+(13, 'Althea',  'Brillantes', '2003-10-30', '09266899812', 'altheakaitlin03@gmail.com'),
+(14, 'Jullian', 'Cruz',       '200'),
 (15, 'Luis',    'Biacora',    '200 ');
 */
 
@@ -72,21 +72,21 @@ ENGINE = InnoDB;
 INSERT INTO `bank_db`.`account_records`
 (`account_ID`, `customer_ID`, `current_balance`, `account_type`, `date_opened`, `account_status`)
 VALUES
-(1, 1,   10458557.00,  'Business', '2005-05-24', 'Closed'), 
+(1, 1,   10458557.00,  'Business', '2005-05-24', '2025-04-25', 'Closed'), 
 (2, 2,   5223630.00,   'Personal', '2018-01-14', 'Active'), 
 (3, 3,   291606216.00, 'Business', '2007-09-06', 'Frozen'),
 (4, 4,   42500.00,     'Personal', '2020-10-31', 'Active'),
 (5, 5,   343081796.00, 'Special',  '2005-08-08', 'Active'),
 (6, 6,   758930.50,    'Personal', '2019-03-15', 'Active'),
-(7, 7,   13450200.75,  'Business', '2012-07-22', 'Closed'),
+(7, 7,   13450200.75,  'Business', '2012-07-22', '2025-07-15', 'Closed'),
 (8, 8,   1876543.00,   'Special',  '2016-11-30', 'Frozen'),
 (9, 9,   305000.00,    'Personal', '2021-06-25', 'Active'),
-(10, 10, 67894321.00,  'Business', '2010-12-05', 'Closed'),
+(10, 10, 67894321.00,  'Business', '2010-12-05', '2025-12-28', 'Closed'),
 (11, 11, 254100.00,    'Special',  '2022-09-18', 'Active'),
 (12, 12, 9976500.00,   'Business', '2015-05-07', 'Frozen'),
 (13, 13, 123500.00,    'Personal', '2023-01-10', 'Active'),
 (14, 14, 84350000.00,  'Special',  '2008-04-21', 'Active'),
-(15, 15, 159000.00,    'Personal', '2020-08-15', 'Closed');
+(15, 15, 159000.00,    'Personal', '2020-08-15', '2025-09-30', 'Closed');
 
 DROP TABLE IF EXISTS `account_type`;
 CREATE TABLE IF NOT EXISTS `bank_db`.`Account_Type` (
@@ -161,6 +161,14 @@ VALUES
 (15000.50, '2024-04-15', 'Successful',  11, 1), -- Bokoen to Josep
 (500.00,   '2024-04-20', 'Cancelled',   9, 3);  -- Konrad to Ido
 
+/*
+(455.50,  '2025-02-10', 'Successful',  15, 12),  -- Luis to Enzo
+(15000.03, '2025-02-22', 'Pending',     7, 13),  -- Natsuki to Althea
+(600.80,   '2025-03-05', 'Failed',      12, 14),-- Enzo to Jullian
+(143.50, '2024-03-15', 'Successful',  14, 15), -- Jullian to Luis
+(530.00,   '2024-03-20', 'Cancelled',   13, 10);  -- Althea to John 
+*/
+
 DROP TABLE IF EXISTS `loan_transaction_history`;
 CREATE TABLE IF NOT EXISTS `bank_db`.`Loan_Transaction_History` (
 `loan_transaction_ID` INT NOT NULL AUTO_INCREMENT, 
@@ -200,6 +208,15 @@ VALUES
 (135000.00,  '2024-03-18', 'Failed',      6, 11), -- Jirkniv to Bokoen
 (2000000.00, '2024-03-30', 'Successful',  11, 5), -- Bokoen to Orion
 (56000.75,   '2024-04-12', 'Cancelled',   2, 8);  -- Lalatina to Epsilus
+
+/*
+(800000.00,  '2025-01-20', 'Successful',  10, 6),  -- John to Jirkniv
+(92000.00,   '2025-03-25', 'Pending',     7, 12), -- Natsuki to Enzo
+(185000.00,  '2025-02-18', 'Failed',      12, 13), -- Enzo to Althea
+(1360000.60, '2025-03-31', 'Successful',  13, 14), -- Althea to Julllian
+(9000000.90,   '2025-01-12', 'Cancelled',   14, 15);  -- Julllian to Luis
+
+*/
 
 DROP TABLE IF EXISTS `Loan_Options`;
 CREATE TABLE IF NOT EXISTS `bank_db`.`Loan_Options` (
@@ -266,4 +283,9 @@ VALUES
 (10, 2, 500000.00, 35000.00, 30000.00, 5000.00, 300000.00, 200000.00, '2024-05-01', '2025-05-01', '2024-06-01', 'Unpaid', 10),      -- John (Personal Loan)
 (11, 1, 2000000.00, 100000.00, 85000.00, 15000.00, 1500000.00, 500000.00, '2024-06-01', '2026-06-01', '2024-07-01', 'Ongoing', 11); -- Bokoen (Business Loan); 
 
-
+/*
+(12, 6, 10000000.00, 76000.00, 64000.00, 50000.00, 900000.00, 300000.00, '2025-10-23', '2030-02-15', '2025-12-23', 'Unpaid', 12),       -- Enzo(Education Loan)
+(13, 6, 75000000.00, 23000.00, 60000.00, 9000.00, 900000.00, 600000.00, '2024-04-10', '2031-04-10', '2024-05-10', 'Ongoing', 13),       -- Althea (Education Loan)
+(14, 6, 5000000.00, 190000.00, 670000.00, 70000.00, 8000000.00, 9000000.00, '2023-10-25', '2027-10-25', '2023-11-25', 'Ongoing', 14), -- Jullian (Education Loan)
+(15, 6, 600000.00, 36000.00, 38000.00, 1000.00, 200000.00, 500000.00, '2024-05-01', '2029-05-01', '2024-06-01', 'Unpaid', 15),      -- Luis (Education Loan)
+*/
