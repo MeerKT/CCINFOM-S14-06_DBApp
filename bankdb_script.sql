@@ -45,7 +45,7 @@ VALUES
 (12, 'Enzo',    'Abanes',     '2003-10-31', '09563171150', 'enzoabanes03@gmail.com'),
 (13, 'Althea',  'Brillantes', '2003-10-30', '09266899812', 'altheakaitlin03@gmail.com'),
 (14, 'Jullian', 'Cruz',       '200'),
-(15, 'Luis',    'Biacora',    '200 ');
+(15, 'Luis',    'Biacora',    '2003-12-13', '09163780185', 'gab.biacora@gmail.com');
 */
 
 DROP TABLE IF EXISTS `account_records`;
