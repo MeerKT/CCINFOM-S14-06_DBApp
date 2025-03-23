@@ -1,0 +1,25 @@
+package Model;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
+public class DatabaseConnection {
+
+    private static final String URL = "jdbc:mysql://localhost:3306/dbapp_bankdb"; // Make sure your URL is consistent
+    private static final String USERNAME = "root"; // Your database username
+    private static final String PASSWORD = "1234"; // Your database password
+
+    public static Connection getConnection() {
+        Connection connection = null;
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+            System.out.println("Database connected successfully.");
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+        }
+        return connection;
+    }
+}
+
