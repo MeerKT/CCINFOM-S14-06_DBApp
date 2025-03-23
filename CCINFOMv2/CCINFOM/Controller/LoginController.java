@@ -1,10 +1,8 @@
-package controller;
+package Controller;
 
-import model.DatabaseConnection;
-import view.CustomerOptionsGUI;
-import view.EmployeeOptionsGUI;
-import view.LoginGUI;
-
+import Model.DatabaseConnection;
+import View.CustomerOptionsGUI;
+import View.EmployeeOptionsGUI;
 import javax.swing.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -13,16 +11,16 @@ import java.sql.SQLException;
 
 public class LoginController {
 
-    private final LoginGUI loginView;
+    private final JFrame loginFrame;
 
-    public LoginController(LoginGUI loginView) {
-        this.loginView = loginView;
+    public LoginController(JFrame loginFrame) {
+        this.loginFrame = loginFrame;
     }
 
     public void authenticateUser(String username, String password, String userType) {
         try (Connection connection = DatabaseConnection.getConnection()) {
             if (connection == null) {
-                JOptionPane.showMessageDialog(loginView, "Database connection failed.");
+                JOptionPane.showMessageDialog(loginFrame, "Database connection failed.");
                 return;
             }
 
@@ -36,8 +34,8 @@ public class LoginController {
             ResultSet resultSet = statement.executeQuery();
 
             if (resultSet.next()) {
-                JOptionPane.showMessageDialog(loginView, userType + " Login Successful!");
-                loginView.dispose(); // Close the login window
+                JOptionPane.showMessageDialog(loginFrame, userType + " Login Successful!");
+                loginFrame.dispose(); // Close the login window
 
                 if (userType.equals("Customer")) {
                     new CustomerOptionsGUI().setVisible(true);
@@ -45,12 +43,12 @@ public class LoginController {
                     new EmployeeOptionsGUI().setVisible(true);
                 }
             } else {
-                JOptionPane.showMessageDialog(loginView, "Invalid credentials. Please try again.");
+                JOptionPane.showMessageDialog(loginFrame, "Invalid credentials. Please try again.");
             }
 
         } catch (SQLException e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(loginView, "An error occurred while connecting to the database.");
+            JOptionPane.showMessageDialog(loginFrame, "An error occurred while connecting to the database.");
         }
     }
 }
