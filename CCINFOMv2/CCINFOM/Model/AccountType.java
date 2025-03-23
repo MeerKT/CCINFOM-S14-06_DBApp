@@ -149,21 +149,21 @@ public class AccountType {
         ResultSet results3 = statement3.executeQuery(check3);
 
         if(!results1.next()) {
-            String checkings = "INSERT INTO account_type (account_type, interest_rate, min_balance) " +
+            String Personal = "INSERT INTO account_type (account_type, interest_rate, min_balance) " +
                     "VALUES ('Personal', 1.5, 5000)";
-            statement1.executeUpdate(checkings);
+            statement1.executeUpdate(Personal);
         }
 
         if(!results2.next()) {
-            String passbook = "INSERT INTO account_type (account_type, interest_rate, min_balance) " +
+            String Business = "INSERT INTO account_type (account_type, interest_rate, min_balance) " +
                     "VALUES ('Business', 0.8, 30000)";
-            statement2.executeUpdate(passbook);
+            statement2.executeUpdate(Business);
         }
 
         if(!results3.next()) {
-            String savings = "INSERT INTO account_type (account_type, interest_rate, min_balance) " +
+            String Special = "INSERT INTO account_type (account_type, interest_rate, min_balance) " +
                     "VALUES ('Special', 2.5, 50000)";
-            statement3.executeUpdate(savings);
+            statement3.executeUpdate(Special);
         }
 
     } catch(SQLException e){
