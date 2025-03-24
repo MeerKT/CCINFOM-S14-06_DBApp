@@ -211,9 +211,9 @@ public void generateMonthlySavings(int customer_id, String yearToGenerate) {
 
 
         System.out.println("Yearly Savings Report for " + yearToGenerate);
-        System.out.println("Total Incoming: ₱" + Math.round(totalIncoming * 100.0) / 100.0);
-        System.out.println("Total Outgoing: ₱" + Math.round(totalOutgoing * 100.0) / 100.0);
-        System.out.println("Net Savings: ₱" + Math.round(yearlySavings * 100.0) / 100.0);
+        System.out.println("Total Incoming: PHP " + Math.round(totalIncoming * 100.0) / 100.0);
+        System.out.println("Total Outgoing: PHP " + Math.round(totalOutgoing * 100.0) / 100.0);
+        System.out.println("Net Savings: PHP " + Math.round(yearlySavings * 100.0) / 100.0);
 
     } catch (SQLException e) {
         e.printStackTrace();
