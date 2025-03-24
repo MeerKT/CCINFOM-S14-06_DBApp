@@ -1,5 +1,6 @@
 package Controller;
 
+import Controller.CustomerGUI;
 import Model.Customer;
 import Model.Account;
 import Model.AvailedLoans;
@@ -9,6 +10,8 @@ import Model.TransactionHistory;
 import javax.swing.*;
 import java.awt.*;
 import java.sql.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class AccountGUI {
     private JFrame frame;
