@@ -224,14 +224,14 @@ VALUES
 
 DROP TABLE IF EXISTS `availed_loans`;
 CREATE TABLE IF NOT EXISTS `dbapp_bankdb`.`Availed_Loans` (
-`loan_ID` INT NOT NULL,
+`loan_ID` INT NOT NULL AUTO_INCREMENT,
 `loan_option_ID` INT NOT NULL, 
-`principal_amt` FLOAT NOT NULL,
-`first_month_principal_amortization` FLOAT NOT NULL,
-`succeding _principal_amortization` FLOAT NOT NULL,  
-`interest_amortization` FLOAT NOT NULL,
-`principal_balance` FLOAT NOT NULL,
-`interest_balance` FLOAT NOT NULL,
+`principal_amt` DOUBLE NOT NULL,
+`first_month_principal_amortization` DOUBLE NOT NULL,
+`succeding_principal_amortization` DOUBLE NOT NULL,  
+`interest_amortization` DOUBLE NOT NULL,
+`principal_balance` DOUBLE NOT NULL,
+`interest_balance` DOUBLE NOT NULL,
 `start_date` DATE NOT NULL, 
 `end_date` DATE NOT NULL,
 `month_payment_day` DATE NOT NULL,
@@ -249,22 +249,22 @@ CONSTRAINT `fk_customer_ID`
     ENGINE = InnoDB;
 
 INSERT INTO `dbapp_bankdb`.`availed_loans`
-(`loan_ID`, `loan_option_ID`, `principal_amt`, `first_month_principal_amortization`, 
- `succeding _principal_amortization`, `interest_amortization`, `principal_balance`, 
+(`loan_option_ID`, `principal_amt`, `first_month_principal_amortization`, 
+ `succeding_principal_amortization`, `interest_amortization`, `principal_balance`, 
  `interest_balance`, `start_date`, `end_date`, `month_payment_day`, `loan_status`, `customer_ID`)
 VALUES
-(1, 1, 1000000.00, 50000.00, 40000.00, 10000.00, 800000.00, 200000.00, '2024-01-01', '2025-01-01', '2024-02-01', 'Ongoing', 1),     -- Josep (Business Loan)
-(2, 2, 250000.00, 20000.00, 15000.00, 5000.00, 175000.00, 75000.00, '2024-01-15', '2025-01-15', '2024-02-15', 'Ongoing', 2),        -- Lalatina (Personal Loan)
-(3, 3, 5000000.00, 200000.00, 180000.00, 20000.00, 3500000.00, 1500000.00, '2023-12-10', '2024-12-10', '2024-01-10', 'Unpaid', 3),  -- Ido (Special Loan)
-(4, 1, 300000.00, 25000.00, 20000.00, 5000.00, 200000.00, 100000.00, '2024-02-05', '2025-02-05', '2024-03-05', 'Ongoing', 4),       -- Belisarius (Business Loan)
-(5, 2, 1500000.00, 100000.00, 90000.00, 10000.00, 900000.00, 600000.00, '2023-11-20', '2024-11-20', '2023-12-20', 'Fully Paid', 5), -- Orion (Personal Loan)
-(6, 4, 6000000.00, 250000.00, 230000.00, 20000.00, 4500000.00, 1500000.00, '2024-03-01', '2029-03-01', '2024-04-01', 'Ongoing', 6), -- Jirkniv (Mortgage Loan)
-(7, 5, 1200000.00, 70000.00, 65000.00, 5000.00, 850000.00, 350000.00, '2024-02-15', '2028-02-15', '2024-03-15', 'Unpaid', 7),       -- Natsuki (Auto Loan)
-(8, 6, 500000.00, 25000.00, 20000.00, 5000.00, 400000.00, 100000.00, '2024-04-10', '2030-04-10', '2024-05-10', 'Ongoing', 8),       -- Epsilus (Education Loan)
-(9, 3, 3000000.00, 180000.00, 150000.00, 30000.00, 2000000.00, 1000000.00, '2023-10-25', '2026-10-25', '2023-11-25', 'Ongoing', 9), -- Konrad (Special Loan)
-(10, 2, 500000.00, 35000.00, 30000.00, 5000.00, 300000.00, 200000.00, '2024-05-01', '2025-05-01', '2024-06-01', 'Unpaid', 10),      -- John (Personal Loan)
-(11, 1, 2000000.00, 100000.00, 85000.00, 15000.00, 1500000.00, 500000.00, '2024-06-01', '2026-06-01', '2024-07-01', 'Ongoing', 11), -- Bokoen (Business Loan); 
-(12, 6, 10000000.00, 76000.00, 64000.00, 50000.00, 900000.00, 300000.00, '2025-10-23', '2030-02-15', '2025-12-23', 'Unpaid', 12),       -- Enzo(Education Loan)
-(13, 6, 75000000.00, 23000.00, 60000.00, 9000.00, 900000.00, 600000.00, '2024-04-10', '2031-04-10', '2024-05-10', 'Ongoing', 13),       -- Althea (Education Loan)
-(14, 6, 5000000.00, 190000.00, 670000.00, 70000.00, 8000000.00, 9000000.00, '2023-10-25', '2027-10-25', '2023-11-25', 'Ongoing', 14), -- Jullian (Education Loan)
-(15, 6, 600000.00, 36000.00, 38000.00, 1000.00, 200000.00, 500000.00, '2024-05-01', '2029-05-01', '2024-06-01', 'Unpaid', 15);      -- Luis (Education Loan)
+( 1, 1000000.00, 50000.00, 40000.00, 10000.00, 800000.00, 200000.00, '2024-01-01', '2025-01-01', '2024-02-01', 'Ongoing', 1),     -- Josep (Business Loan)
+( 2, 250000.00, 20000.00, 15000.00, 5000.00, 175000.00, 75000.00, '2024-01-15', '2025-01-15', '2024-02-15', 'Ongoing', 2),        -- Lalatina (Personal Loan)
+( 3, 5000000.00, 200000.00, 180000.00, 20000.00, 3500000.00, 1500000.00, '2023-12-10', '2024-12-10', '2024-01-10', 'Unpaid', 3),  -- Ido (Special Loan)
+( 1, 300000.00, 25000.00, 20000.00, 5000.00, 200000.00, 100000.00, '2024-02-05', '2025-02-05', '2024-03-05', 'Ongoing', 4),       -- Belisarius (Business Loan)
+( 2, 1500000.00, 100000.00, 90000.00, 10000.00, 900000.00, 600000.00, '2023-11-20', '2024-11-20', '2023-12-20', 'Fully Paid', 5), -- Orion (Personal Loan)
+( 4, 6000000.00, 250000.00, 230000.00, 20000.00, 4500000.00, 1500000.00, '2024-03-01', '2029-03-01', '2024-04-01', 'Ongoing', 6), -- Jirkniv (Mortgage Loan)
+( 5, 1200000.00, 70000.00, 65000.00, 5000.00, 850000.00, 350000.00, '2024-02-15', '2028-02-15', '2024-03-15', 'Unpaid', 7),       -- Natsuki (Auto Loan)
+( 6, 500000.00, 25000.00, 20000.00, 5000.00, 400000.00, 100000.00, '2024-04-10', '2030-04-10', '2024-05-10', 'Ongoing', 8),       -- Epsilus (Education Loan)
+( 3, 3000000.00, 180000.00, 150000.00, 30000.00, 2000000.00, 1000000.00, '2023-10-25', '2026-10-25', '2023-11-25', 'Ongoing', 9), -- Konrad (Special Loan)
+( 2, 500000.00, 35000.00, 30000.00, 5000.00, 300000.00, 200000.00, '2024-05-01', '2025-05-01', '2024-06-01', 'Unpaid', 10),      -- John (Personal Loan)
+( 1, 200000.00, 100000.00, 85000.00, 15000.00, 1500000.00, 500000.00, '2024-06-01', '2026-06-01', '2024-07-01', 'Ongoing', 11), -- Bokoen (Business Loan); 
+( 6, 100000.00, 76000.00, 64000.00, 50000.00, 900000.00, 300000.00, '2025-10-23', '2030-02-15', '2025-12-23', 'Unpaid', 12),       -- Enzo(Education Loan)
+( 6, 750000.00, 23000.00, 60000.00, 9000.00, 900000.00, 600000.00, '2024-04-10', '2031-04-10', '2024-05-10', 'Ongoing', 13),       -- Althea (Education Loan)
+( 6, 500000.00, 190000.00, 670000.00, 70000.00, 8000000.00, 9000000.00, '2023-10-25', '2027-10-25', '2023-11-25', 'Ongoing', 14), -- Jullian (Education Loan)
+( 6, 600000.00, 36000.00, 38000.00, 1000.00, 200000.00, 500000.00, '2024-05-01', '2029-05-01', '2024-06-01', 'Unpaid', 15);      -- Luis (Education Loan)
