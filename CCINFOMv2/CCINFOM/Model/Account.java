@@ -1,12 +1,8 @@
 package Model;
 
 import HelperClass.UserInput;
-
-import javax.xml.transform.Result;
 import java.sql.*;
 import java.text.DateFormatSymbols;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -31,7 +27,7 @@ public class Account {
 
     public static void showAccounts(int customer_id){
         try (Connection con = DriverManager.getConnection(
-                    "jdbc:mysql://localhost:3307/dbapp_bankdb",
+                    "jdbc:mysql://localhost:3306/dbapp_bankdb",
                     "root",
                     "1234"
                 )) {
@@ -61,7 +57,7 @@ public class Account {
 
     public static void viewAccountInfo (int account_id, int customer_id){
         try (Connection con = DriverManager.getConnection(
-                "jdbc:mysql://localhost:3307/dbapp_bankdb",
+                "jdbc:mysql://localhost:3306/dbapp_bankdb",
                     "root",
                     "1234")) {
             String checkQuery = "SELECT ar.account_ID, ar.customer_ID, ar.current_balance, ar.account_type_ID, at.account_type, ar.date_opened, ar.date_closed, ar.account_status "
@@ -117,7 +113,7 @@ public class Account {
 
     public static void depositToAccount(int account_id){
         try (Connection con = DriverManager.getConnection(
-               "jdbc:mysql://localhost:3307/dbapp_bankdb",
+               "jdbc:mysql://localhost:3306/dbapp_bankdb",
                     "root",
                     "1234")) {
             System.out.print("Input amount to deposit: ");
@@ -142,7 +138,7 @@ public class Account {
 
     public static void withdrawFromAccount(int account_id){
         try (Connection con = DriverManager.getConnection(
-                "jdbc:mysql://localhost:3307/dbapp_bankdb",
+                "jdbc:mysql://localhost:3306/dbapp_bankdb",
                     "root",
                     "1234")) {
             System.out.print("Input amount to withdraw: ");
@@ -183,7 +179,7 @@ public class Account {
 
     public static void transferToAnother(int account_id){
         try (Connection con = DriverManager.getConnection(
-                "jdbc:mysql://localhost:3307/dbapp_bankdb",
+                "jdbc:mysql://localhost:3306/dbapp_bankdb",
                     "root",
                     "1234")) {
             System.out.print("Input amount to transfer: ");
@@ -239,7 +235,7 @@ public class Account {
 
     public static void createNewAccount(int customer_id) {
         try (Connection con = DriverManager.getConnection(
-                "jdbc:mysql://localhost:3307/dbapp_bankdb",
+                "jdbc:mysql://localhost:3306/dbapp_bankdb",
                     "root",
                     "1234")) {
 
@@ -304,7 +300,7 @@ public class Account {
 
     public static void showMonthStatementOfAccount(int account_id){
         try (Connection con = DriverManager.getConnection(
-                "jdbc:mysql://localhost:3307/dbapp_bankdb",
+                "jdbc:mysql://localhost:3306/dbapp_bankdb",
                     "root",
                     "1234")) {
             Calendar cal = Calendar.getInstance();
@@ -398,7 +394,7 @@ public class Account {
 
     public static void closeAccount(int account_id) {
         try (Connection con = DriverManager.getConnection(
-               "jdbc:mysql://localhost:3307/dbapp_bankdb",
+               "jdbc:mysql://localhost:3306/dbapp_bankdb",
                     "root",
                     "1234")) {
             // Step 1: Verify the account balance is zero and no pending loans
