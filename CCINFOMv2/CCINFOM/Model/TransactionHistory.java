@@ -278,7 +278,7 @@ public void generateMonthlySavings(int customer_id, String yearToGenerate) {
             Connection connection = DriverManager.getConnection(
                     "jdbc:mysql://localhost:3306/bank_db",
                     "root",
-                    "Sweetmochi*2003"
+                    "password"
             );
     
             while (true) { // Loop to allow the user to go back
