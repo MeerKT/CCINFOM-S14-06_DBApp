@@ -1,17 +1,10 @@
 package Controller;
 
-import Controller.CustomerGUI;
-import Model.Customer;
 import Model.Account;
-import Model.AvailedLoans;
-import Model.LoanOptions;
-import Model.TransactionHistory;
-
-import javax.swing.*;
+import Model.Customer;
 import java.awt.*;
 import java.sql.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import javax.swing.*;
 
 public class AccountGUI {
     private JFrame frame;
@@ -80,7 +73,7 @@ public class AccountGUI {
     private String getAccountDetails(int account_id, int customer_id) {
         StringBuilder accountInfo = new StringBuilder();
 
-        try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/dbapp_bankdb", "root", "1234")) {
+        try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3307/dbapp_bankdb", "root", "Lu15&MySQL")) {
             String query = "SELECT ar.account_ID, ar.customer_ID, ar.current_balance, ar.account_type_ID, at.account_type, ar.date_opened, ar.date_closed, ar.account_status "
                          + "FROM account_records ar JOIN account_type at ON ar.account_type_ID = at.account_type_ID "
                          + "WHERE ar.account_ID = ? AND ar.customer_ID = ? AND ar.account_status = 'Active'";
@@ -113,7 +106,7 @@ public class AccountGUI {
 
         double amount = Double.parseDouble(amountStr);
 
-        try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/dbapp_bankdb", "root", "1234")) {
+        try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3307/dbapp_bankdb", "root", "Lu15&MySQL")) {
             String query = "UPDATE account_records SET current_balance = current_balance + ? WHERE account_ID = ? AND account_status = 'Active'";
 
             try (PreparedStatement statement = con.prepareStatement(query)) {
@@ -134,7 +127,7 @@ public class AccountGUI {
 
         double amount = Double.parseDouble(amountStr);
 
-        try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/dbapp_bankdb", "root", "1234")) {
+        try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3307/dbapp_bankdb", "root", "Lu15&MySQL")) {
             String query = "SELECT current_balance FROM account_records WHERE account_ID = ? AND account_status = 'Active'";
             try (PreparedStatement statement = con.prepareStatement(query)) {
                 statement.setInt(1, account_id);
@@ -169,7 +162,7 @@ public class AccountGUI {
 
         int dest_id = Integer.parseInt(destIdStr);
 
-        try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/dbapp_bankdb", "root", "1234")) {
+        try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3307/dbapp_bankdb", "root", "Lu15&MySQL")) {
             String updateQuery = "UPDATE account_records SET current_balance = current_balance - ? WHERE account_ID = ? AND account_status = 'Active'";
             try (PreparedStatement statement = con.prepareStatement(updateQuery)) {
                 statement.setDouble(1, amount);
@@ -187,7 +180,7 @@ public class AccountGUI {
         int confirm = JOptionPane.showConfirmDialog(frame, "Are you sure you want to close this account?", "Confirm", JOptionPane.YES_NO_OPTION);
         if (confirm != JOptionPane.YES_OPTION) return;
 
-        try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/dbapp_bankdb", "root", "1234")) {
+        try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3307/dbapp_bankdb", "root", "Lu15&MySQL")) {
             String updateQuery = "UPDATE account_records SET account_status = 'Closed' WHERE account_ID = ?";
             try (PreparedStatement statement = con.prepareStatement(updateQuery)) {
                 statement.setInt(1, account_id);
