@@ -72,7 +72,7 @@ public class EmployeeOptions extends JFrame {
     public static void showCustomersOfBank(){
         try {
             Connection connection = DriverManager.getConnection(
-                    "jdbc:mysql://localhost:3307/dbapp_bankdb",
+                    "jdbc:mysql://localhost:3306/dbapp_bankdb",
                     "root",
                     "1234"
             );
