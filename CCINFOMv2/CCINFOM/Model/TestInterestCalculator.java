@@ -3,7 +3,7 @@ import java.text.DecimalFormat;
 
 public class TestInterestCalculator {
     public static void main(String[] args) {
-        String url = "jdbc:mysql://localhost:3307/bankdb";
+        String url = "jdbc:mysql://localhost:3306/bankdb";
         String user = "root";
         String password = "1234";
         
