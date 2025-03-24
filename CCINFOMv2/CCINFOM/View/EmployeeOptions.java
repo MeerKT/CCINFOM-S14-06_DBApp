@@ -1,14 +1,18 @@
 package View;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import HelperClass.UserInput;
 import Model.AccountType;
 import Model.LoanOptions;
 import Model.TransactionHistory;
+import java.awt.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import javax.swing.*;
 
-public class EmployeeOptions {
+public class EmployeeOptions extends JFrame {
     public static void showOptions() {
         JFrame frame = new JFrame("Employee Options");
         frame.setSize(400, 400);
@@ -65,4 +69,59 @@ public class EmployeeOptions {
             }
         }
     }
+    public static void showCustomersOfBank(){
+        try {
+            Connection connection = DriverManager.getConnection(
+                    "jdbc:mysql://localhost:3306/dbapp_bankdb",
+                    "root",
+                    "1234"
+            );
+
+            String getInfoQuery = "SELECT * FROM customer_records";
+            PreparedStatement preparedStatementInfo = connection.prepareStatement(getInfoQuery);
+            ResultSet res = preparedStatementInfo.executeQuery();
+
+            int option = 1;
+            String[] types = new String[3];
+            while(res.next()){
+                System.out.println(option + " - " + res.getString("customer_records"));
+                types[option - 1] = res.getString("customer_records");
+                option++;
+            }
+
+            int chosenOption;
+            do {
+                System.out.print("Choose cutomer record to view information: ");
+                chosenOption = Integer.parseInt(UserInput.getScanner().nextLine());
+            } while( chosenOption < 1 || chosenOption > option -1);
+
+
+            String viewQuery = "SELECT * FROM customer_records WHERE customer_records = ?";
+
+            try(PreparedStatement statement = connection.prepareStatement(viewQuery)){
+                statement.setString(1, types[chosenOption - 1]);
+
+                ResultSet typeRes = statement.executeQuery();
+
+                if(typeRes.next()){
+                    System.out.println("Customer_ID: " + typeRes.getString("customer_ID"));
+                    System.out.println("First Name: " + typeRes.getDouble("first_name"));
+                    System.out.println("Last Name: " + typeRes.getDouble("last_name"));
+                    System.out.println("Birth Date: " + typeRes.getString("birthdate"));
+                    System.out.println("Phone No: " + typeRes.getDouble("phone_number"));
+                    System.out.println("Email Address: " + typeRes.getDouble("email_address"));
+
+
+                } else {
+                    System.out.println("Customer record doesn't exist");
+                }
+            }
+
+
+        } catch (SQLException e){
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Database connection failed: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
 }
