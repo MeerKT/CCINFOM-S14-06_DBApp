@@ -46,11 +46,11 @@ public class TransactionHistoryGUI {
     private void addActionListeners() {
         accountTransactionButton.addActionListener(e -> recordAccountTransaction());
         loanTransactionButton.addActionListener(e -> recordLoanTransaction());
-        annualTransactionButton.addActionListener(e -> TransactionHistory.generateAnnualTransaction());
-        annualLoanPaymentButton.addActionListener(e -> TransactionHistory.generateAnnualLoanPayment());
+        annualTransactionButton.addActionListener(e -> generateAnnualTransactionReport());
+        annualLoanPaymentButton.addActionListener(e -> generateAnnualLoanPaymentReport());
         monthlySavingsButton.addActionListener(e -> generateMonthlySavings());
-        viewTransactionHistoryButton.addActionListener(e -> TransactionHistory.viewTransactionHistoryOfAccount());
-        viewLoanHistoryButton.addActionListener(e -> TransactionHistory.viewLoanPaymentHistoryOfAccount());
+        viewTransactionHistoryButton.addActionListener(e -> viewTransactionHistory());
+        viewLoanHistoryButton.addActionListener(e -> viewLoanHistory());
     }
 
     private void recordAccountTransaction() {
@@ -63,6 +63,7 @@ public class TransactionHistoryGUI {
             Integer receiverId = receiver.isEmpty() ? null : Integer.parseInt(receiver);
             double amount = Double.parseDouble(amountStr);
             TransactionHistory.generateAccountTransactionRecord(senderId, receiverId, amount);
+            JOptionPane.showMessageDialog(frame, "Transaction recorded successfully!");
         } catch (Exception e) {
             JOptionPane.showMessageDialog(frame, "Invalid input!");
         }
@@ -78,6 +79,27 @@ public class TransactionHistoryGUI {
             int receiverId = Integer.parseInt(receiver);
             double amount = Double.parseDouble(amountStr);
             TransactionHistory.generateLoanTransactionRecord(senderId, receiverId, amount);
+            JOptionPane.showMessageDialog(frame, "Loan transaction recorded successfully!");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(frame, "Invalid input!");
+        }
+    }
+
+    private void generateAnnualTransactionReport() {
+        String year = JOptionPane.showInputDialog("Enter Year:");
+        try {
+            TransactionHistory.generateAnnualTransaction(year);
+            JOptionPane.showMessageDialog(frame, "Annual transaction report generated successfully!");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(frame, "Invalid input!");
+        }
+    }
+
+    private void generateAnnualLoanPaymentReport() {
+        String year = JOptionPane.showInputDialog("Enter Year:");
+        try {
+            TransactionHistory.generateAnnualLoanPayment(year);
+            JOptionPane.showMessageDialog(frame, "Annual loan payment report generated successfully!");
         } catch (Exception e) {
             JOptionPane.showMessageDialog(frame, "Invalid input!");
         }
@@ -91,6 +113,27 @@ public class TransactionHistoryGUI {
             int id = Integer.parseInt(customerId);
             TransactionHistory history = new TransactionHistory();
             history.generateMonthlySavings(id, year);
+            JOptionPane.showMessageDialog(frame, "Monthly savings report generated successfully!");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(frame, "Invalid input!");
+        }
+    }
+
+    private void viewTransactionHistory() {
+        String accountId = JOptionPane.showInputDialog("Enter Account ID:");
+        try {
+            TransactionHistory.viewTransactionHistoryOfAccount(accountId);
+            JOptionPane.showMessageDialog(frame, "Transaction history displayed successfully!");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(frame, "Invalid input!");
+        }
+    }
+
+    private void viewLoanHistory() {
+        String accountId = JOptionPane.showInputDialog("Enter Account ID:");
+        try {
+            TransactionHistory.viewLoanPaymentHistoryOfAccount(accountId);
+            JOptionPane.showMessageDialog(frame, "Loan payment history displayed successfully!");
         } catch (Exception e) {
             JOptionPane.showMessageDialog(frame, "Invalid input!");
         }
