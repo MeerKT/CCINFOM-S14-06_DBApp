@@ -7,38 +7,37 @@ USE `dbapp_bankdb`;
 
 DROP TABLE IF EXISTS `customer_records`;
 CREATE TABLE IF NOT EXISTS `dbapp_bankdb`.`Customer_Records` (
-`customer_ID` INT NOT NULL, 
-`first_name` VARCHAR(45) NOT NULL,
-`last_name` VARCHAR(45) NOT NULL, 
-`birthdate` DATE NOT NULL,
-`phone_number`  VARCHAR(15) NOT NULL,
-`email_address` VARCHAR(45) NOT NULL,
+    `customer_ID` INT NOT NULL AUTO_INCREMENT, 
+    `first_name` VARCHAR(45) NOT NULL,
+    `last_name` VARCHAR(45) NOT NULL, 
+    `birthdate` DATE NOT NULL,
+    `phone_number` VARCHAR(15) NOT NULL,
+    `email_address` VARCHAR(45) NOT NULL,
 
-PRIMARY KEY (`customer_ID`),
-UNIQUE INDEX `customer_ID_UNIQUE` (`customer_ID` ASC) VISIBLE)
-ENGINE = InnoDB;
+    PRIMARY KEY (`customer_ID`),
+    UNIQUE INDEX `customer_ID_UNIQUE` (`customer_ID` ASC) VISIBLE
+) ENGINE = InnoDB;
 
 INSERT INTO `dbapp_bankdb`.`customer_records`
-(`customer_ID`, `first_name`, `last_name`, `birthdate`, `phone_number`, `email_address`)
+(`first_name`, `last_name`, `birthdate`, `phone_number`, `email_address`)
 VALUES
-(1, 'Josep',	  'Gobles',    '1997-10-29', '09563662240', 'jgobles@gmail.com'), 
-(2, 'Lalatina',	  'Dustiness', '2000-01-14', '09566177681', 'dustiness16@gmail.com'),
-(3, 'Ido',		  'Bondrewd',  '1989-04-10', '09170286264', 'bondrewd@gmail.com'),
-(4, 'Belisarius', 'Cawl',      '2003-11-16', '09564311080', 'notezekiel_sedayne@gmail.com'),
-(5, 'Orion', 	  'Pax',       '1985-12-25', '09176565226', 'optimus_prime85@gmail.com'),
+('Josep',	  'Gobles',    '1997-10-29', '09563662240', 'jgobles@gmail.com'), 
+('Lalatina',	  'Dustiness', '2000-01-14', '09566177681', 'dustiness16@gmail.com'),
+('Ido',		  'Bondrewd',  '1989-04-10', '09170286264', 'bondrewd@gmail.com'),
+('Belisarius', 'Cawl',      '2003-11-16', '09564311080', 'notezekiel_sedayne@gmail.com'),
+('Orion', 	  'Pax',       '1985-12-25', '09176565226', 'optimus_prime85@gmail.com'),
 
-(6,  'Jirkniv', 'Janovich',  '1995-12-23', '09172986734',  'jano123@gmail.com'),
-(7,  'Natsuki', 'Subaru',    '2003-04-01', '09561817370',  'natsukisubaru@gmail.com'),
-(8,  'Epsilus', 'Mygelion',   '1999-05-15', '09562387614',  'epsilus_mygelion40@gmail.com'),
-(9,  'Konrad',  'Curze',     '1997-06-16', '09174573620',  'nighthaunter@gmail.com'),
-(10, 'John',    'MacTavish', '1997-11-06', '09565392270',  'soapmactavish@gmail.com'),
+('Jirkniv', 'Janovich',  '1995-12-23', '09172986734',  'jano123@gmail.com'),
+('Natsuki', 'Subaru',    '2003-04-01', '09561817370',  'natsukisubaru@gmail.com'),
+('Epsilus', 'Mygelion',   '1999-05-15', '09562387614',  'epsilus_mygelion40@gmail.com'),
+('Konrad',  'Curze',     '1997-06-16', '09174573620',  'nighthaunter@gmail.com'),
+('John',    'MacTavish', '1997-11-06', '09565392270',  'soapmactavish@gmail.com'),
 
-(11, 'Bokoen',  'Braun',      '1994-12-19', '09563780739', 'denmark_bokoen1@gmail.com'), 
-(12, 'Enzo',    'Abanes',     '2003-10-31', '09563171150', 'enzoabanes03@gmail.com'),
-(13, 'Althea',  'Brillantes', '2003-10-30', '09266899812', 'altheakaitlin03@gmail.com'),
-(14, 'Jullian', 'Cruz',       '2003-10-06', '09171234567',  'jullian_cruz@dlsu.edu.ph'),
-(15, 'Luis',    'Biacora',    '2003-12-13', '09163780185', 'gab.biacora@gmail.com');
-
+('Bokoen',  'Braun',      '1994-12-19', '09563780739', 'denmark_bokoen1@gmail.com'), 
+('Enzo',    'Abanes',     '2003-10-31', '09563171150', 'enzoabanes03@gmail.com'),
+('Althea',  'Brillantes', '2003-10-30', '09266899812', 'altheakaitlin03@gmail.com'),
+('Jullian', 'Cruz',       '2003-10-06', '09171234567',  'jullian_cruz@dlsu.edu.ph'),
+('Luis',    'Biacora',    '2003-12-13', '09163780185', 'gab.biacora@gmail.com');
 
 DROP TABLE IF EXISTS `account_records`;
 CREATE TABLE IF NOT EXISTS `dbapp_bankdb`.`account_records` (
