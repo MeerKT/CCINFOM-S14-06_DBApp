@@ -273,51 +273,78 @@ public void generateMonthlySavings(int customer_id, String yearToGenerate) {
 
     }
 
-    public static void viewLoanPaymentHistoryOfAccount(){
+    public static void viewLoanPaymentHistoryOfAccount() {
         try {
             Connection connection = DriverManager.getConnection(
-                    "jdbc:mysql://127.0.0.1:3306/bankdb",
-                    "java",
-                    "password"
+                    "jdbc:mysql://localhost:3306/bank_db",
+                    "root",
+                    "Sweetmochi*2003"
             );
-
-            System.out.print("Input account id to view Loan Payment history: ");
-            int id = Integer.parseInt(UserInput.getScanner().nextLine());
-
-            System.out.println("Sort By\n1 - Date\n2 - Size of Payment");
-            System.out.print("Choose option: ");
-            int sort = Integer.parseInt(UserInput.getScanner().nextLine());
-
-            String query = "SELECT * FROM loan_transaction_history\n" +
-                    "WHERE sender_acc_ID = ?";
-            String orderAmt = " ORDER BY amount DESC;";
-            String orderDate = " ORDER BY transaction_date DESC;";
-
-            if(sort == 1){
-                query += orderDate;
-            } else if (sort == 2){
-                query += orderAmt;
-            }
-
-            try (PreparedStatement statement = connection.prepareStatement(query)){
-                statement.setInt(1, id);
-
-                ResultSet res = statement.executeQuery();
-                if (!res.isBeforeFirst() ) {
-                    System.out.println("Account has no payment history yet");
+    
+            while (true) { // Loop to allow the user to go back
+                String idStr = JOptionPane.showInputDialog("Enter Account ID to view Loan Payment History:");
+                if (idStr == null) return; // Exit if user cancels
+    
+                int accountId;
+                try {
+                    accountId = Integer.parseInt(idStr);
+                } catch (NumberFormatException e) {
+                    JOptionPane.showMessageDialog(null, "Invalid Account ID. Please enter a valid number.", "Error", JOptionPane.ERROR_MESSAGE);
+                    continue; // Restart the loop
                 }
-
-                while(res.next()){
-                    System.out.println("Payment ID: " + res.getInt("transaction_ID") +
-                            "\tTransaction Date: " + res.getDate("transaction_date") +
-                            "\tSender Acc ID: " + res.getInt("sender_acc_ID") +
-                            "\tReceiver Loan ID: " + res.getInt("receiver_loan_ID") +
-                            "\tAmount: " + res.getDouble("amount"));
+    
+                // Ask for Sorting Option with "Back" button
+                String[] sortOptions = {"Sort by Date", "Sort by Payment Amount", "Back"};
+                int sortChoice = JOptionPane.showOptionDialog(
+                        null,
+                        "Choose Sorting Option:",
+                        "Sort Payments",
+                        JOptionPane.DEFAULT_OPTION,
+                        JOptionPane.QUESTION_MESSAGE,
+                        null,
+                        sortOptions,
+                        sortOptions[0]
+                );
+    
+                if (sortChoice == 2 || sortChoice == JOptionPane.CLOSED_OPTION) {
+                    continue; // Go back to Account ID input
                 }
+    
+                // Determine Sorting Order
+                String orderClause = (sortChoice == 1) ? "ORDER BY loan_amount DESC" : "ORDER BY loan_transaction_date DESC";
+    
+                // SQL Query to Retrieve Loan Payment History
+                String query = "SELECT loan_transaction_ID, loan_transaction_date, lender_acc_ID, borrower_acc_ID, loan_amount " +
+                               "FROM loan_transaction_history WHERE lender_acc_ID = ? " + orderClause;
+    
+                try (PreparedStatement statement = connection.prepareStatement(query)) {
+                    statement.setInt(1, accountId);
+                    ResultSet res = statement.executeQuery();
+    
+                    // Store Loan Payments in a List
+                    List<String> payments = new ArrayList<>();
+                    while (res.next()) {
+                        String paymentInfo = "Payment ID: " + res.getInt("loan_transaction_ID") +
+                                "\nDate: " + res.getDate("loan_transaction_date") +
+                                "\nSender Acc ID: " + res.getInt("lender_acc_ID") +
+                                "\nReceiver Loan ID: " + res.getInt("borrower_acc_ID") +
+                                "\nAmount: PHP " + res.getDouble("loan_amount") + "\n------------------------";
+                        payments.add(paymentInfo);
+                    }
+    
+                    // Display Results
+                    if (payments.isEmpty()) {
+                        JOptionPane.showMessageDialog(null, "No loan payment history found for this account.", "Info", JOptionPane.INFORMATION_MESSAGE);
+                    } else {
+                        JOptionPane.showMessageDialog(null, String.join("\n", payments), "Loan Payment History", JOptionPane.INFORMATION_MESSAGE);
+                    }
+                }
+                break; // Exit loop if everything is completed
             }
-
+    
         } catch (SQLException e) {
             e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Database connection failed: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
 
     }
