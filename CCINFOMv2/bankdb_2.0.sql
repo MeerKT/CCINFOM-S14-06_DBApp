@@ -41,7 +41,7 @@ VALUES
 
 DROP TABLE IF EXISTS `account_records`;
 CREATE TABLE IF NOT EXISTS `dbapp_bankdb`.`account_records` (
-    `account_ID` INT NOT NULL,
+    `account_ID` INT NOT NULL AUTO_INCREMENT,
     `customer_ID` INT NOT NULL,
     `current_balance` FLOAT NOT NULL, 
     `account_type_ID` INT NOT NULL, -- Foreign key reference to account_type
@@ -70,23 +70,23 @@ CREATE TABLE IF NOT EXISTS `dbapp_bankdb`.`account_records` (
 ) ENGINE = InnoDB;
 
 INSERT INTO `dbapp_bankdb`.`account_records`
-(`account_ID`, `customer_ID`, `current_balance`, `account_type_ID`, `date_opened`, `account_status`)
+(`customer_ID`, `current_balance`, `account_type_ID`, `date_opened`, `account_status`)
 VALUES
-(1, 1,   10458557.00,  '2', '2025-04-25', 'Closed'), 
-(2, 2,   5223630.00,   '1', '2018-01-14', 'Active'), 
-(3, 3,   291606216.00, '2', '2007-09-06', 'Frozen'),
-(4, 4,   42500.00,     '1', '2020-10-31', 'Active'),
-(5, 5,   343081796.00, '3',  '2005-08-08', 'Active'),
-(6, 6,   758930.50,    '1', '2019-03-15', 'Active'),
-(7, 7,   13450200.75,  '2', '2025-07-15', 'Closed'),
-(8, 8,   1876543.00,   '3',  '2016-11-30', 'Frozen'),
-(9, 9,   305000.00,    '1', '2021-06-25', 'Active'),
-(10, 10, 67894321.00,  '2', '2025-12-28', 'Closed'),
-(11, 11, 254100.00,    '3',  '2022-09-18', 'Active'),
-(12, 12, 9976500.00,   '2', '2015-05-07', 'Frozen'),
-(13, 13, 123500.00,    '1', '2023-01-10', 'Active'),
-(14, 14, 84350000.00,  '3',  '2008-04-21', 'Active'),
-(15, 15, 159000.00,    '1', '2025-09-30', 'Closed');
+(1,   10458557.00,  '2', '2025-04-25', 'Closed'), 
+(2,   5223630.00,   '1', '2018-01-14', 'Active'), 
+(3,   291606216.00, '2', '2007-09-06', 'Frozen'),
+(4,   42500.00,     '1', '2020-10-31', 'Active'),
+(5,   343081796.00, '3',  '2005-08-08', 'Active'),
+(6,   758930.50,    '1', '2019-03-15', 'Active'),
+(7,   13450200.75,  '2', '2025-07-15', 'Closed'),
+(8,   1876543.00,   '3',  '2016-11-30', 'Frozen'),
+(9,   305000.00,    '1', '2021-06-25', 'Active'),
+(10, 67894321.00,  '2', '2025-12-28', 'Closed'),
+(11, 254100.00,    '3',  '2022-09-18', 'Active'),
+(12, 9976500.00,   '2', '2015-05-07', 'Frozen'),
+(13, 123500.00,    '1', '2023-01-10', 'Active'),
+(14, 84350000.00,  '3',  '2008-04-21', 'Active'),
+(15, 159000.00,    '1', '2025-09-30', 'Closed');
 
 DROP TABLE IF EXISTS `account_type`;
 CREATE TABLE IF NOT EXISTS `dbapp_bankdb`.`Account_Type` (
