@@ -1,7 +1,11 @@
 package Controller;
 
-import Model.Customer;
+import Model.Account;
+import Model.AvailedLoans;
+import Model.LoanOptions;
+import Model.TransactionHistory;
 
+import Model.Customer;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -96,49 +100,115 @@ public class CustomerGUI {
         JFrame frame = new JFrame("Customer Actions");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setSize(400, 300);
-
+    
         JPanel panel = new JPanel();
         panel.setLayout(new GridLayout(6, 1, 10, 10));
-
+    
         JButton viewAccountsButton = new JButton("View Accounts");
         JButton openAccountButton = new JButton("Open New Account");
         JButton viewLoansButton = new JButton("View Loans");
         JButton availLoanButton = new JButton("Avail New Loan");
         JButton savingsReportButton = new JButton("View Annual Savings Report");
         JButton payLoanButton = new JButton("Pay Loan");
-
-        viewAccountsButton.addActionListener(e -> 
-            JOptionPane.showMessageDialog(frame, "Viewing accounts for: " + customer.getCustomer_first_name())
-        );
-
-        openAccountButton.addActionListener(e -> 
-            JOptionPane.showMessageDialog(frame, "Opening new account...")
-        );
-
-        viewLoansButton.addActionListener(e -> 
-            JOptionPane.showMessageDialog(frame, "Viewing loans...")
-        );
-
-        availLoanButton.addActionListener(e -> 
-            JOptionPane.showMessageDialog(frame, "Availing new loan...")
-        );
-
-        savingsReportButton.addActionListener(e -> 
-            JOptionPane.showMessageDialog(frame, "Generating annual savings report...")
-        );
-
-        payLoanButton.addActionListener(e -> 
-            JOptionPane.showMessageDialog(frame, "Processing loan payment...")
-        );
-
+    
+        viewAccountsButton.addActionListener(e -> {
+            new AccountGUI(customer); // Open AccountGUI with the current customer
+        });
+    
+        openAccountButton.addActionListener(e -> {
+            JFrame accountFrame = new JFrame("Open New Account");
+            accountFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            accountFrame.setSize(300, 250);
+        
+            JPanel panel2 = new JPanel();
+            panel2.setLayout(new GridLayout(4, 2, 10, 10));
+        
+            JLabel accountTypeLabel = new JLabel("Select Account Type:");
+            String[] accountTypes = {"Personal", "Business", "Special"};
+            JComboBox<String> accountTypeBox = new JComboBox<>(accountTypes);
+        
+            JLabel depositLabel = new JLabel("Initial Deposit:");
+            JTextField depositField = new JTextField();
+        
+            JButton createAccountButton = new JButton("Create Account");
+        
+            panel.add(accountTypeLabel);
+            panel.add(accountTypeBox);
+            panel.add(depositLabel);
+            panel.add(depositField);
+            panel.add(new JLabel()); // Empty space
+            panel.add(createAccountButton);
+        
+            createAccountButton.addActionListener(ev -> {
+                String selectedType = (String) accountTypeBox.getSelectedItem();
+                String depositText = depositField.getText();
+        
+                // Validate deposit input
+                try {
+                    double initialDeposit = Double.parseDouble(depositText);
+        
+                    // Ensure 'customer' object exists and has a valid ID
+                    if (customer == null) {
+                        JOptionPane.showMessageDialog(accountFrame, "Customer information not found. Please log in again.");
+                        return;
+                    }
+        
+                    int customerID = customer.getCustomer_id(); // Ensure this method exists and returns an int
+                    boolean success = Account.createNewAccount(customerID, selectedType, initialDeposit);
+        
+                    if (success) {
+                        JOptionPane.showMessageDialog(accountFrame, "New " + selectedType + " account created successfully!");
+                        accountFrame.dispose();
+                    } else {
+                        JOptionPane.showMessageDialog(accountFrame, "Account creation failed. Please try again.");
+                    }
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(accountFrame, "Invalid deposit amount. Please enter a valid number.");
+                }
+            });
+        
+            accountFrame.add(panel);
+            accountFrame.setVisible(true);
+        });
+    
+        viewLoansButton.addActionListener(e -> {
+            AvailedLoans.showAvailedLoans(customer.getCustomer_id());
+        });
+    
+        availLoanButton.addActionListener(e -> {
+            AvailedLoans.loanAppli(customer.getCustomer_id());
+            JOptionPane.showMessageDialog(frame, "Loan application submitted!");
+        });
+    
+        savingsReportButton.addActionListener(e -> {
+            String yearToGenerate = JOptionPane.showInputDialog(frame, "Enter the year (YYYY)T for savings report:");
+            if (yearToGenerate != null && yearToGenerate.matches("\\d{4}")) {
+                try {
+                    TransactionHistory transactionHistory = new TransactionHistory();
+                    transactionHistory.generateMonthlySavings(customer.getCustomer_id(), yearToGenerate);
+                    JOptionPane.showMessageDialog(frame, "Savings report generated for " + yearToGenerate);
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(frame, "Error generating report: " + ex.getMessage());
+                }
+            } else {
+                JOptionPane.showMessageDialog(frame, "Invalid year format. Please enter in YYYY format.");
+            }
+        });
+    
+        payLoanButton.addActionListener(e -> {
+            AvailedLoans.loanPayment(customer.getCustomer_id());
+            JOptionPane.showMessageDialog(frame, "Loan payment processed.");
+        });
+    
         panel.add(viewAccountsButton);
         panel.add(openAccountButton);
         panel.add(viewLoansButton);
         panel.add(availLoanButton);
         panel.add(savingsReportButton);
         panel.add(payLoanButton);
-
+    
         frame.add(panel);
         frame.setVisible(true);
     }
+    
 }
