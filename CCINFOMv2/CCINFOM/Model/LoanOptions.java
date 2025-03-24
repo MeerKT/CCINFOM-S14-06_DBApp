@@ -6,7 +6,7 @@ public class LoanOptions {
     public static void defaultLoan(String url, String user, String password){
         try {
             Connection connection = DriverManager.getConnection(
-                    "jdbc:mysql://localhost:3307/dbapp_bankdb",
+                    "jdbc:mysql://localhost:3306/dbapp_bankdb",
                     "root",
                     "1234"
             );
@@ -63,7 +63,7 @@ public class LoanOptions {
     public static void addLoanOption(String loan_option_type, double interest_rate, int loan_duration_month, double max_loan_amount, double min_loan_amount) {
         try {
             Connection connection = DriverManager.getConnection(
-                    "jdbc:mysql://localhost:3307/dbapp_bankdb",
+                    "jdbc:mysql://localhost:3306/dbapp_bankdb",
                     "root",
                     "1234"
             );
