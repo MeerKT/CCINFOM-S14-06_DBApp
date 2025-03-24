@@ -15,7 +15,7 @@ public class TransactionHistory {
     public static void generateAccountTransactionRecord(Integer sender_id, Integer receiver_id, double amount){
         try {
             Connection con = DriverManager.getConnection(
-                    "jdbc:mysql://localhost:3307/bankdb",
+                    "jdbc:mysql://localhost:3306/bankdb",
                     "java",
                     "password");
 
@@ -52,7 +52,7 @@ public class TransactionHistory {
     public static void generateLoanTransactionRecord(int sender_id, int receiver_id, double amount){
         try {
             Connection con = DriverManager.getConnection(
-                    "jdbc:mysql://localhost:3307/bankdb",
+                    "jdbc:mysql://localhost:3306/bankdb",
                     "java",
                     "password");
 
@@ -85,7 +85,7 @@ public class TransactionHistory {
         double totalIncoming = 0;
         try {
             Connection connection = DriverManager.getConnection(
-                    "jdbc:mysql://127.0.0.1:3307/bankdb",
+                    "jdbc:mysql://127.0.0.1:3306/bankdb",
                     "java",
                     "password"
             );
@@ -130,7 +130,7 @@ public class TransactionHistory {
 
         try {
             Connection connection = DriverManager.getConnection(
-                    "jdbc:mysql://localhost:3307/bankdb",
+                    "jdbc:mysql://localhost:3306/bankdb",
                     "java",
                     "password"
             );
@@ -166,7 +166,7 @@ public void generateMonthlySavings(int customer_id, String yearToGenerate) {
 
     try {
         Connection connection = DriverManager.getConnection(
-                "jdbc:mysql://127.0.0.1:3307/bankdb",
+                "jdbc:mysql://127.0.0.1:3306/bankdb",
                 "java",
                 "password"
         );
@@ -226,7 +226,7 @@ public void generateMonthlySavings(int customer_id, String yearToGenerate) {
     public static void viewTransactionHistoryOfAccount(){
         try {
             Connection connection = DriverManager.getConnection(
-                    "jdbc:mysql://127.0.0.1:3307/bankdb",
+                    "jdbc:mysql://127.0.0.1:3306/bankdb",
                     "java",
                     "password"
             );
@@ -276,7 +276,7 @@ public void generateMonthlySavings(int customer_id, String yearToGenerate) {
     public static void viewLoanPaymentHistoryOfAccount(){
         try {
             Connection connection = DriverManager.getConnection(
-                    "jdbc:mysql://127.0.0.1:3307/bankdb",
+                    "jdbc:mysql://127.0.0.1:3306/bankdb",
                     "java",
                     "password"
             );
