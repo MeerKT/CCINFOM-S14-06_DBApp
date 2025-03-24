@@ -2,9 +2,12 @@ package Model;
 
 import HelperClass.UserInput;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
+import javax.swing.JOptionPane;
 
 public class TransactionHistory {
     private int transaction_id, sender_id, receiver_id;
@@ -79,85 +82,84 @@ public class TransactionHistory {
         }
     }
 
-    public static void generateAnnualTransaction(){
-
+    public static String generateAnnualTransaction(int year) {
         double totalOutgoing = 0;
         double totalIncoming = 0;
-        try {
-            Connection connection = DriverManager.getConnection(
-                    "jdbc:mysql://127.0.0.1:3306/bankdb",
-                    "java",
-                    "password"
-            );
-            Calendar cal = Calendar.getInstance();
-            System.out.print("Input year to view: ");
-            int year = Integer.parseInt(UserInput.getScanner().nextLine());
+        StringBuilder report = new StringBuilder();
 
-            System.out.println("Transaction Volume for the Year " + year);
+        try (Connection connection = DatabaseConnection.getConnection()) {
+            if (connection == null) {
+                return "Failed to connect to the database.";
+            }
 
             Calendar calendar = GregorianCalendar.getInstance();
             calendar.set(Calendar.YEAR, year);
 
-            String depositQuery = "SELECT SUM(amount) FROM account_transaction_history WHERE YEAR(transaction_date) = YEAR(?) " +
-                    "AND sender_acc_id is null";
+            String depositQuery = "SELECT SUM(amount) FROM account_transaction_history WHERE YEAR(transaction_date) = ? " +
+                    "AND sender_acc_id IS NULL";
             PreparedStatement incomingStatement = connection.prepareStatement(depositQuery);
-            incomingStatement.setDate(1, new java.sql.Date(calendar.getTime().getTime()));
+            incomingStatement.setInt(1, year);
             ResultSet depositResult = incomingStatement.executeQuery();
 
-            String withdrawQuery = "SELECT SUM(amount) FROM account_transaction_history WHERE YEAR(transaction_date) = YEAR(?) " +
-                    "AND receiver_acc_id is null";
+            String withdrawQuery = "SELECT SUM(amount) FROM account_transaction_history WHERE YEAR(transaction_date) = ? " +
+                    "AND receiver_acc_id IS NULL";
             PreparedStatement outgoingStatement = connection.prepareStatement(withdrawQuery);
-            outgoingStatement.setDate(1, new java.sql.Date(calendar.getTime().getTime()));
+            outgoingStatement.setInt(1, year);
             ResultSet withdrawResult = outgoingStatement.executeQuery();
 
-            if(withdrawResult.next()){
-                System.out.println("Total Outgoing: " + withdrawResult.getDouble(1));
+            if (withdrawResult.next()) {
+                totalOutgoing = withdrawResult.getDouble(1);
             }
 
-            if(depositResult.next()){
-                System.out.println("Total Incoming: " + depositResult.getDouble(1));
+            if (depositResult.next()) {
+                totalIncoming = depositResult.getDouble(1);
             }
 
+            double netSavings = totalIncoming - totalOutgoing;
 
-        } catch (SQLException e){
+            report.append("Transaction Volume for the Year ").append(year).append("\n")
+                    .append("Total Incoming: ₱").append(totalIncoming).append("\n")
+                    .append("Total Outgoing: ₱").append(totalOutgoing).append("\n")
+                    .append("Net Savings: ₱").append(netSavings).append("\n");
+
+        } catch (SQLException e) {
             e.printStackTrace();
+            report.append("An error occurred: ").append(e.getMessage());
         }
+        
+        return report.toString();
     }
 
-    public static void generateAnnualLoanPayment (){
+    public static String generateAnnualLoanPayment(int year) {
         double totalLoanPayment = 0;
         int totalNumberOfLoanPayment = 0;
+        StringBuilder report = new StringBuilder();
 
-        try {
-            Connection connection = DriverManager.getConnection(
-                    "jdbc:mysql://localhost:3306/bankdb",
-                    "java",
-                    "password"
-            );
+        try (Connection connection = DatabaseConnection.getConnection()) {
+            if (connection == null) {
+                return "Failed to connect to the database.";
+            }
 
-            System.out.print("Input year: ");
-            int year = Integer.parseInt(UserInput.getScanner().nextLine());
-
-            Calendar calendar = GregorianCalendar.getInstance();
-            calendar.set(Calendar.YEAR, year);
-
-            String getAnnualReportString = "SELECT * FROM loan_transaction_history WHERE YEAR(transaction_date) = YEAR(?)";
-            PreparedStatement preparedStatement = connection.prepareStatement(getAnnualReportString);
-            preparedStatement.setDate(1, new java.sql.Date(calendar.getTime().getTime()));
+            String query = "SELECT * FROM loan_transaction_history WHERE YEAR(transaction_date) = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setInt(1, year);
             ResultSet reportResult = preparedStatement.executeQuery();
 
-            while (reportResult.next()){
+            while (reportResult.next()) {
                 totalLoanPayment += reportResult.getDouble("amount");
                 totalNumberOfLoanPayment++;
             }
 
-            System.out.println("Annual Loan Payment Volume Report " + year);
-            System.out.println("Total Loan Payment Made: ₱" + Math.round(totalLoanPayment * 100.0) / 100.0);
-            System.out.println("Total Number of Loan Payments Made: " + totalNumberOfLoanPayment);
+            report.append("Annual Loan Payment Volume Report for ").append(year).append("\n")
+                    .append("Total Loan Payment Made: ₱").append(Math.round(totalLoanPayment * 100.0) / 100.0).append("\n")
+                    .append("Total Number of Loan Payments Made: ").append(totalNumberOfLoanPayment).append("\n");
 
-        } catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
+            report.append("An error occurred: ").append(e.getMessage());
         }
+
+        return report.toString();
     }
 
 public void generateMonthlySavings(int customer_id, String yearToGenerate) {
