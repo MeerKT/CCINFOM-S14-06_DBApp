@@ -31,10 +31,13 @@ public class Account {
 
     public static void showAccounts(int customer_id){
         try (Connection con = DriverManager.getConnection(
-                "jdbc:mysql://localhost:3306/bankdb",
-                "java",
-                "password")) {
-            String checkQuery = "SELECT * FROM account WHERE customer_id = ? AND account_status = 'active'";
+                    "jdbc:mysql://localhost:3307/dbapp_bankdb",
+                    "root",
+                    "1234"
+                )) {
+            String checkQuery = "SELECT ar.account_ID, ar.customer_ID, ar.current_balance, ar.account_type_ID, at.account_type, ar.date_opened, ar.date_closed, ar.account_status " 
+                              + "FROM account_records ar JOIN account_type at ON ar.account_type_ID = at.account_type_ID "
+                              + "WHERE customer_ID = ? AND account_status = 'Active' ";
 
             try(PreparedStatement statement = con.prepareStatement(checkQuery)){
                 statement.setInt(1, customer_id);
@@ -46,7 +49,7 @@ public class Account {
                     }
 
                     while(res.next()){
-                        System.out.print("Account ID: " + res.getInt("account_id"));
+                        System.out.print("Account ID: " + res.getInt("account_ID"));
                         System.out.println("\tAccount type: " +res.getString("account_type"));
                     }
                 }
@@ -58,10 +61,12 @@ public class Account {
 
     public static void viewAccountInfo (int account_id, int customer_id){
         try (Connection con = DriverManager.getConnection(
-                "jdbc:mysql://localhost:3306/bankdb",
-                "java",
-                "password")) {
-            String checkQuery = "SELECT * FROM account WHERE account_id = ? AND customer_id = ? AND account_status = 'active'";
+                "jdbc:mysql://localhost:3307/dbapp_bankdb",
+                    "root",
+                    "1234")) {
+            String checkQuery = "SELECT ar.account_ID, ar.customer_ID, ar.current_balance, ar.account_type_ID, at.account_type, ar.date_opened, ar.date_closed, ar.account_status "
+                              +  "FROM account_records ar JOIN account_type at ON ar.account_type_ID = at.account_type_ID "
+                              + "WHERE account_id = ? AND customer_id = ? AND account_status = 'Active'";
 
             try(PreparedStatement statement = con.prepareStatement(checkQuery)){
                 statement.setInt(1, account_id);
@@ -69,7 +74,7 @@ public class Account {
 
                 try(ResultSet res = statement.executeQuery()){
                     if(res.next()){
-                        System.out.print("Account ID: " + res.getInt("account_id"));
+                        System.out.print("Account ID: " + res.getInt("account_ID"));
                         System.out.println("\tAccount type: " +res.getString("account_type"));
                         System.out.println("Current Balance: " + res.getDouble("current_balance"));
                     } else {
@@ -112,12 +117,12 @@ public class Account {
 
     public static void depositToAccount(int account_id){
         try (Connection con = DriverManager.getConnection(
-                "jdbc:mysql://localhost:3306/bankdb",
-                "java",
-                "password")) {
+               "jdbc:mysql://localhost:3307/dbapp_bankdb",
+                    "root",
+                    "1234")) {
             System.out.print("Input amount to deposit: ");
             double amount = Double.parseDouble(UserInput.getScanner().nextLine());
-            String query = "UPDATE account SET current_balance = current_balance + ? WHERE account_id = ? AND account_status = 'active'";
+            String query = "UPDATE account_records SET current_balance = current_balance + ? WHERE account_ID = ? AND account_status = 'Active'";
 
             try(PreparedStatement statement = con.prepareStatement(query)){
                 statement.setDouble(1, amount);
@@ -137,13 +142,13 @@ public class Account {
 
     public static void withdrawFromAccount(int account_id){
         try (Connection con = DriverManager.getConnection(
-                "jdbc:mysql://localhost:3306/bankdb",
-                "java",
-                "password")) {
+                "jdbc:mysql://localhost:3307/dbapp_bankdb",
+                    "root",
+                    "1234")) {
             System.out.print("Input amount to withdraw: ");
             double amount = Double.parseDouble(UserInput.getScanner().nextLine());
 
-            String query = "SELECT current_balance FROM account WHERE account_id = ? AND account_status = 'active'";
+            String query = "SELECT current_balance FROM account_records WHERE account_ID = ? AND account_status = 'Active'";
 
             try(PreparedStatement statement = con.prepareStatement(query)){
                 statement.setInt(1, account_id);
@@ -158,7 +163,7 @@ public class Account {
                 }
             }
 
-            String updateQuery = "UPDATE account SET current_balance = current_balance - ? WHERE account_id = ? AND account_status = 'active'";
+            String updateQuery = "UPDATE account_records SET current_balance = current_balance - ? WHERE account_ID = ? AND account_status = 'Active'";
 
             try(PreparedStatement statement = con.prepareStatement(updateQuery)){
                 statement.setDouble(1, amount);
@@ -178,13 +183,13 @@ public class Account {
 
     public static void transferToAnother(int account_id){
         try (Connection con = DriverManager.getConnection(
-                "jdbc:mysql://localhost:3306/bankdb",
-                "java",
-                "password")) {
+                "jdbc:mysql://localhost:3307/dbapp_bankdb",
+                    "root",
+                    "1234")) {
             System.out.print("Input amount to transfer: ");
             double amount = Double.parseDouble(UserInput.getScanner().nextLine());
 
-            String query = "SELECT current_balance FROM account WHERE account_id = ? AND account_status = 'active'";
+            String query = "SELECT current_balance FROM account_records WHERE account_ID = ? AND account_status = 'Active'";
 
             try(PreparedStatement statement = con.prepareStatement(query)){
                 statement.setInt(1, account_id);
@@ -201,7 +206,7 @@ public class Account {
             System.out.print("Input Account ID to transfer to: ");
             int dest_id = Integer.parseInt(UserInput.getScanner().nextLine());
 
-            String transferQuery = "UPDATE account SET current_balance = current_balance + ? WHERE account_id = ? AND account_status = 'active'";
+            String transferQuery = "UPDATE account_records SET current_balance = current_balance + ? WHERE account_ID = ? AND account_status = 'Active'";
 
             try(PreparedStatement statement = con.prepareStatement(transferQuery)){
                 statement.setDouble(1, amount);
@@ -214,7 +219,7 @@ public class Account {
                 }
             }
 
-            String deductQuery = "UPDATE account SET current_balance = current_balance - ? WHERE account_id = ? AND account_status = 'active'";
+            String deductQuery = "UPDATE account_records SET current_balance = current_balance - ? WHERE account_ID = ? AND account_status = 'Active'";
 
             try(PreparedStatement statement = con.prepareStatement(deductQuery)){
                 statement.setDouble(1, amount);
@@ -232,76 +237,58 @@ public class Account {
         }
     }
 
-    public static void createNewAccount(int customer_id) {
+    public static boolean createNewAccount(int customer_id, String accountType, double initialDeposit) {
         try (Connection con = DriverManager.getConnection(
-                "jdbc:mysql://localhost:3306/bankdb",
-                "java",
-                "password")) {
+                "jdbc:mysql://localhost:3307/dbapp_bankdb", "root", "1234")) {
 
-
-            String account_type = "";
-            int choice;
-            do {
-                System.out.println("Choose Account Type:");
-                System.out.println("1 - Savings");
-                System.out.println("2 - Checkings");
-                System.out.println("3 - Passbook");
-                choice = Integer.parseInt(UserInput.getScanner().nextLine());
-                switch (choice) {
-                    case 1:
-                        account_type = "savings";
-                        break;
-                    case 2:
-                        account_type = "checkings";
-                        break;
-                    case 3:
-                        account_type = "passbook";
-                        break;
-                    default:
-                        System.out.println("Invalid choice. Please select again.");
-                }
-            } while (choice < 1 || choice > 3);
-
-            // Prompt user for an initial deposit
-            System.out.print("Enter Initial Deposit Amount: ");
-            double initial_deposit = Double.parseDouble(UserInput.getScanner().nextLine());
+            // Convert account type from string to corresponding ID
+            int account_type_ID;
+            switch (accountType.toLowerCase()) {
+                case "personal":
+                    account_type_ID = 1;
+                    break;
+                case "business":
+                    account_type_ID = 2;
+                    break;
+                case "special":
+                    account_type_ID = 3;
+                    break;
+                default:
+                    System.out.println("Invalid account type.");
+                    return false;
+            }
 
             // Insert new account into the database
-            String insertQuery = "INSERT INTO account (account_type, current_balance, date_opened, account_status, customer_id) " +
+            String insertQuery = "INSERT INTO account_records (account_type_ID, current_balance, date_opened, account_status, customer_ID) " +
                     "VALUES (?, ?, NOW(), 'Active', ?)";
             try (PreparedStatement statement = con.prepareStatement(insertQuery, Statement.RETURN_GENERATED_KEYS)) {
-                statement.setString(1, account_type);
-                statement.setDouble(2, initial_deposit);
+                statement.setInt(1, account_type_ID);
+                statement.setDouble(2, initialDeposit);
                 statement.setInt(3, customer_id);
 
                 int rowsAffected = statement.executeUpdate();
                 if (rowsAffected > 0) {
-                    // Retrieve the generated account ID
                     try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
                         if (generatedKeys.next()) {
                             int newAccountId = generatedKeys.getInt(1);
-                            System.out.println("Account created successfully!");
                             System.out.println("New Account ID: " + newAccountId);
-                            System.out.println("Account Type: " + account_type);
-                            System.out.println("Current Balance: " + initial_deposit);
+                            return true;
                         }
                     }
                 }
             }
-
         } catch (SQLException e) {
             e.printStackTrace();
-        } catch (NumberFormatException e) {
-            System.out.println("Invalid input. Please enter valid numbers.");
         }
+        return false;
     }
 
 
     public static void showMonthStatementOfAccount(int account_id){
         try (Connection con = DriverManager.getConnection(
-                "jdbc:mysql://localhost:3306/bankdb",
-                "java",
-                "password")) {
+                "jdbc:mysql://localhost:3307/dbapp_bankdb",
+                    "root",
+                    "1234")) {
             Calendar cal = Calendar.getInstance();
             System.out.print("Input year to view: ");
             int year = Integer.parseInt(UserInput.getScanner().nextLine());
@@ -316,12 +303,12 @@ public class Account {
             calendar.set(Calendar.YEAR, year);
 
             String outgoing = "SELECT SUM(amount) FROM account_transaction_history th\n" +
-                    "WHERE sender_acc_id = ? \n" +
+                    "WHERE sender_acc_ID = ? \n" +
                     "AND MONTH(transaction_date) = MONTH(?)" +
                     "AND YEAR(transaction_date) = YEAR(?);";
 
             String incoming = "SELECT SUM(amount) FROM account_transaction_history th\n" +
-                    "WHERE receiver_acc_id = ?\n" +
+                    "WHERE receiver_acc_ID = ?\n" +
                     "AND MONTH(transaction_date) = MONTH(?)" +
                     "AND YEAR(transaction_date) = YEAR(?);";
 
@@ -355,7 +342,7 @@ public class Account {
             }
 
             String TransacHistory = "SELECT * FROM account_transaction_history th\n" +
-                    "WHERE sender_acc_id = ? OR receiver_acc_id = ?\n" +
+                    "WHERE sender_acc_ID = ? OR receiver_acc_ID = ?\n" +
                     "AND MONTH(transaction_date) = MONTH(?)\n" +
                     "AND YEAR(transaction_date) = YEAR(?)\n" +
                     "ORDER BY transaction_date;";
@@ -372,7 +359,7 @@ public class Account {
                     while(res.next()){
                         String amt = "Php " + res.getDouble("amount");
 
-                        if(res.getInt("sender_acc_id") != account_id){
+                        if(res.getInt("sender_acc_ID") != account_id){
                             System.out.printf("%-10s  %-9s  %-9s%n", "Incoming",
                                     res.getDate("transaction_date"), amt);
                         } else {
@@ -393,11 +380,11 @@ public class Account {
 
     public static void closeAccount(int account_id) {
         try (Connection con = DriverManager.getConnection(
-                "jdbc:mysql://localhost:3306/bankdb",
-                "java",
-                "password")) {
+               "jdbc:mysql://localhost:3307/dbapp_bankdb",
+                    "root",
+                    "1234")) {
             // Step 1: Verify the account balance is zero and no pending loans
-            String checkBalanceQuery = "SELECT current_balance, account_status FROM account WHERE account_id = ?;";
+            String checkBalanceQuery = "SELECT current_balance, account_status FROM account_records WHERE account_ID = ?;";
             double currentBalance = 0.0;
             String accountStatus = "";
 
@@ -426,7 +413,7 @@ public class Account {
 
             // Step 2: Check for any pending transactions or fees
             String checkPendingTransactionsQuery = "SELECT COUNT(*) FROM account_transaction_history WHERE " +
-                    "(sender_acc_id = ? OR receiver_acc_id = ?) AND transaction_status = 'Pending'";
+                    "(sender_acc_ID = ? OR receiver_acc_ID = ?) AND transaction_status = 'Pending'";
             try (PreparedStatement statement = con.prepareStatement(checkPendingTransactionsQuery)) {
                 statement.setInt(1, account_id);
                 statement.setInt(2, account_id);
@@ -443,7 +430,7 @@ public class Account {
 
             if(confirm.equals("YES")){
                 // Step 3: Update the account status to "Closed"
-                String updateAccountQuery = "UPDATE account SET account_status = 'Closed' WHERE account_id = ?";
+                String updateAccountQuery = "UPDATE account_records SET account_status = 'Closed' WHERE account_ID = ?";
                 try (PreparedStatement statement = con.prepareStatement(updateAccountQuery)) {
                     statement.setInt(1, account_id);
                     int rowsAffected = statement.executeUpdate();
