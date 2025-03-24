@@ -1,8 +1,9 @@
 package Model;
 
-import HelperClass.UserInput;
 import java.sql.*;
 import java.util.Date;
+
+import HelperClass.UserInput;
 
 public class Customer {
     private int customer_id;
@@ -21,12 +22,12 @@ public class Customer {
 
     public static boolean signUp(String firstName, String lastName, String phone, String email, String dob) {
         try (Connection con = DriverManager.getConnection(
-                    "jdbc:mysql://localhost:3306/dbapp_bankdb",
-                    "root",
-                    "1234")) {
+                "jdbc:mysql://localhost:3307/dbapp_bankdb",
+                "root",
+                "1234")) {
 
             // Check if user already exists
-            String checkQuery = "SELECT * FROM customer_records WHERE customer_first_name = ? AND customer_last_name = ?";
+            String checkQuery = "SELECT * FROM customer_records WHERE first_name = ? AND last_name = ? ";
             try (PreparedStatement checkStatement = con.prepareStatement(checkQuery)) {
                 checkStatement.setString(1, firstName);
                 checkStatement.setString(2, lastName);
@@ -43,9 +44,9 @@ public class Customer {
             try (PreparedStatement preparedStatement = con.prepareStatement(insertQuery)) {
                 preparedStatement.setString(1, firstName);
                 preparedStatement.setString(2, lastName);
-                preparedStatement.setString(3, phone);
-                preparedStatement.setString(4, email);
-                preparedStatement.setString(5, dob);
+                preparedStatement.setString(3, dob);
+                preparedStatement.setString(4, phone);
+                preparedStatement.setString(5, email);
 
                 return preparedStatement.executeUpdate() > 0;
             }
@@ -57,7 +58,7 @@ public class Customer {
     }
 
     public static Customer login(String firstName, String lastName) {
-        try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/dbapp_bankdb", "root", "1234")) {
+        try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3307/dbapp_bankdb", "root", "1234")) {
             String checkQuery = "SELECT * FROM customer_records WHERE first_name = ? AND last_name = ?";
             try (PreparedStatement statement = con.prepareStatement(checkQuery)) {
                 statement.setString(1, firstName);
@@ -67,9 +68,9 @@ public class Customer {
                     if (res.next()) {
                         return new Customer(
                                 res.getInt("customer_id"),
-                                res.getString("customer_first_name"),
-                                res.getString("customer_last_name"),
-                                res.getDate("birth_date"),
+                                res.getString("first_name"),
+                                res.getString("last_name"),
+                                res.getDate("birthdate"),
                                 res.getString("phone_number"),
                                 res.getString("email_address"));
                     } else {
@@ -82,7 +83,7 @@ public class Customer {
             return null;
         }
     }
-   private static void showCustomerActions(Customer loggedInSession) {
+    private static void showCustomerActions(Customer loggedInSession) {
         int option;
 
         do {
@@ -92,7 +93,7 @@ public class Customer {
             option = Integer.parseInt(UserInput.getScanner().nextLine());
 
             switch (option) {
-                case 1:
+                case 1: //
                     System.out.println("View Accounts");
                     Account.showAccounts(loggedInSession.customer_id);
                     System.out.print("Input Account ID to Open Account: ");
@@ -100,17 +101,17 @@ public class Customer {
                     Account.viewAccountInfo(acc_id, loggedInSession.customer_id);
                     break;
 
-                case 2:
+                case 2: //open new account
                     System.out.println("Open New Account");
-                    Account.createNewAccount(loggedInSession.customer_id);
+                    // Account.createNewAccount(loggedInSession.customer_id );
                     break;
 
-                case 3:
+                case 3: //view loans
                     System.out.println("View Loans");
                     AvailedLoans.showAvailedLoans(loggedInSession.customer_id);
                     break;
 
-                case 4:
+                case 4: //avail loans
                     System.out.println("Avail Loans");
                     AvailedLoans.loanAppli(loggedInSession.customer_id);
                     break;
