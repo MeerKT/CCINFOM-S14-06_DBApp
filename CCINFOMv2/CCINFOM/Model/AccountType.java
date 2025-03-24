@@ -1,7 +1,6 @@
 package Model;
 
 import HelperClass.UserInput;
-
 import java.sql.*;
 
 public class AccountType {
@@ -9,7 +8,7 @@ public class AccountType {
     public static void showAccountTypes(){
         try {
             Connection connection = DriverManager.getConnection(
-                    "jdbc:mysql://localhost:3307/dbapp_bankdb",
+                    "jdbc:mysql://localhost:3306/dbapp_bankdb",
                     "root",
                     "1234"
             );
@@ -75,7 +74,7 @@ public class AccountType {
     public static void changeInterestRate(String accType){
         try {
             Connection connection = DriverManager.getConnection(
-                    "jdbc:mysql://localhost:3307/dbapp_bankdb",
+                    "jdbc:mysql://localhost:3306/dbapp_bankdb",
                     "root",
                     "1234"
             );
@@ -103,7 +102,7 @@ public class AccountType {
     public static void changeMinimumBalance(String accType){
         try {
             Connection connection = DriverManager.getConnection(
-                    "jdbc:mysql://localhost:3307/dbapp_bankdb",
+                    "jdbc:mysql://localhost:3306/dbapp_bankdb",
                     "root",
                     "1234"
             );
@@ -131,7 +130,7 @@ public class AccountType {
     public static void addDefaultAccountTypes(){
         try {
         Connection connection = DriverManager.getConnection(
-                    "jdbc:mysql://localhost:3307/dbapp_bankdb",
+                    "jdbc:mysql://localhost:3306/dbapp_bankdb",
                     "root",
                     "1234"
         );
