@@ -22,7 +22,7 @@ public class TransactionHistory {
                     "password");
 
             String insert = "INSERT INTO account_transaction_history (amount, " +
-                            "transaction_date, transaction_status, sender_acc_id, receiver_acc_id)" +
+                            "transaction_date, transaction_status, sender_acc_ID, receiver_acc_ID)" +
                             "VALUES (?, NOW(), ?, ?, ?)";
 
             try (PreparedStatement preparedStatement = con.prepareStatement(insert)) {
@@ -59,7 +59,7 @@ public class TransactionHistory {
                     "password");
 
             String insert = "INSERT INTO loan_transaction_history (amount, " +
-                    "transaction_date, transaction_status, sender_acc_id, receiver_loan_id)" +
+                    "transaction_date, transaction_status, sender_acc_ID, receiver_loan_ID)" +
                     "VALUES (?, NOW(), ?, ?, ?)";
 
             try (PreparedStatement preparedStatement = con.prepareStatement(insert)) {
@@ -174,18 +174,18 @@ public void generateMonthlySavings(int customer_id, String yearToGenerate) {
         );
 
         
-        String accountQuery = "SELECT account_id FROM account WHERE customer_id = ?";
+        String accountQuery = "SELECT account_ID FROM account_records WHERE customer_ID = ?";
         PreparedStatement accountStmt = connection.prepareStatement(accountQuery);
         accountStmt.setInt(1, customer_id);
         ResultSet accountResult = accountStmt.executeQuery();
 
 
         while (accountResult.next()) {
-            int accountId = accountResult.getInt("account_id");
+            int accountId = accountResult.getInt("account_ID");
 
 
             String outgoingQuery = "SELECT SUM(amount) AS totalOutgoing FROM account_transaction_history " +
-                    "WHERE sender_acc_id = ? AND DATE_FORMAT(transaction_date, '%Y') = ?";
+                    "WHERE sender_acc_ID = ? AND DATE_FORMAT(transaction_date, '%Y') = ?";
             PreparedStatement outgoingStmt = connection.prepareStatement(outgoingQuery);
             outgoingStmt.setInt(1, accountId);
             outgoingStmt.setString(2, yearToGenerate);
@@ -197,7 +197,7 @@ public void generateMonthlySavings(int customer_id, String yearToGenerate) {
 
 
             String incomingQuery = "SELECT SUM(amount) AS totalIncoming FROM account_transaction_history " +
-                    "WHERE receiver_acc_id = ? AND DATE_FORMAT(transaction_date, '%Y') = ?";
+                    "WHERE receiver_acc_ID = ? AND DATE_FORMAT(transaction_date, '%Y') = ?";
             PreparedStatement incomingStmt = connection.prepareStatement(incomingQuery);
             incomingStmt.setInt(1, accountId);
             incomingStmt.setString(2, yearToGenerate);
@@ -241,7 +241,7 @@ public void generateMonthlySavings(int customer_id, String yearToGenerate) {
             int sort = Integer.parseInt(UserInput.getScanner().nextLine());
 
             String query = "SELECT * FROM account_transaction_history\n" +
-                    "WHERE sender_acc_id = ? OR receiver_acc_id = ?";
+                    "WHERE sender_acc_ID = ? OR receiver_acc_ID = ?";
             String orderAmt = " ORDER BY amount DESC;";
             String orderDate = " ORDER BY transaction_date DESC;";
 
@@ -261,10 +261,10 @@ public void generateMonthlySavings(int customer_id, String yearToGenerate) {
                 }
 
                 while(res.next()){
-                    System.out.println("Transaction ID: " + res.getInt("transaction_id") +
+                    System.out.println("Transaction ID: " + res.getInt("transaction_ID") +
                             "\tTransaction Date: " + res.getDate("transaction_date") +
-                            "\tSender Acc ID: " + res.getInt("sender_acc_id") +
-                            "\tReceiver Acc ID: " + res.getInt("receiver_acc_id") +
+                            "\tSender Acc ID: " + res.getInt("sender_acc_ID") +
+                            "\tReceiver Acc ID: " + res.getInt("receiver_acc_ID") +
                             "\tAmount: " + res.getDouble("amount"));
                 }
             }
@@ -291,7 +291,7 @@ public void generateMonthlySavings(int customer_id, String yearToGenerate) {
             int sort = Integer.parseInt(UserInput.getScanner().nextLine());
 
             String query = "SELECT * FROM loan_transaction_history\n" +
-                    "WHERE sender_acc_id = ?";
+                    "WHERE sender_acc_ID = ?";
             String orderAmt = " ORDER BY amount DESC;";
             String orderDate = " ORDER BY transaction_date DESC;";
 
@@ -310,10 +310,10 @@ public void generateMonthlySavings(int customer_id, String yearToGenerate) {
                 }
 
                 while(res.next()){
-                    System.out.println("Payment ID: " + res.getInt("transaction_id") +
+                    System.out.println("Payment ID: " + res.getInt("transaction_ID") +
                             "\tTransaction Date: " + res.getDate("transaction_date") +
-                            "\tSender Acc ID: " + res.getInt("sender_acc_id") +
-                            "\tReceiver Loan ID: " + res.getInt("receiver_loan_id") +
+                            "\tSender Acc ID: " + res.getInt("sender_acc_ID") +
+                            "\tReceiver Loan ID: " + res.getInt("receiver_loan_ID") +
                             "\tAmount: " + res.getDouble("amount"));
                 }
             }
