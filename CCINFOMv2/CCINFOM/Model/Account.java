@@ -233,68 +233,50 @@ public class Account {
         }
     }
 
-    public static void createNewAccount(int customer_id) {
+    public static boolean createNewAccount(int customer_id, String accountType, double initialDeposit) {
         try (Connection con = DriverManager.getConnection(
-                "jdbc:mysql://localhost:3306/dbapp_bankdb",
-                    "root",
-                    "1234")) {
+                "jdbc:mysql://localhost:3307/dbapp_bankdb", "root", "1234")) {
 
-
-            int account_type_ID = 0;
-            int choice;
-            do {
-                System.out.println("Choose Account Type:");
-                System.out.println("1 - Personal");
-                System.out.println("2 - Business");
-                System.out.println("3 - Special");
-                choice = Integer.parseInt(UserInput.getScanner().nextLine());
-                switch (choice) {
-                    case 1:
-                        account_type_ID = 1; //personal
-                        break;
-                    case 2:
-                        account_type_ID = 2; //business
-                        break;
-                    case 3:
-                        account_type_ID = 3; //special
-                        break;
-                    default:
-                        System.out.println("Invalid choice. Please select again.");
-                }
-            } while (choice < 1 || choice > 3);
-
-            // Prompt user for an initial deposit
-            System.out.print("Enter Initial Deposit Amount: ");
-            double initial_deposit = Double.parseDouble(UserInput.getScanner().nextLine());
+            // Convert account type from string to corresponding ID
+            int account_type_ID;
+            switch (accountType.toLowerCase()) {
+                case "personal":
+                    account_type_ID = 1;
+                    break;
+                case "business":
+                    account_type_ID = 2;
+                    break;
+                case "special":
+                    account_type_ID = 3;
+                    break;
+                default:
+                    System.out.println("Invalid account type.");
+                    return false;
+            }
 
             // Insert new account into the database
             String insertQuery = "INSERT INTO account_records (account_type_ID, current_balance, date_opened, account_status, customer_ID) " +
                     "VALUES (?, ?, NOW(), 'Active', ?)";
             try (PreparedStatement statement = con.prepareStatement(insertQuery, Statement.RETURN_GENERATED_KEYS)) {
                 statement.setInt(1, account_type_ID);
-                statement.setDouble(2, initial_deposit);
+                statement.setDouble(2, initialDeposit);
                 statement.setInt(3, customer_id);
 
                 int rowsAffected = statement.executeUpdate();
                 if (rowsAffected > 0) {
-                    // Retrieve the generated account ID
                     try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
                         if (generatedKeys.next()) {
                             int newAccountId = generatedKeys.getInt(1);
-                            System.out.println("Account created successfully!");
                             System.out.println("New Account ID: " + newAccountId);
-                            System.out.println("Account Type: " + account_type_ID);
-                            System.out.println("Current Balance: " + initial_deposit);
+                            return true;
                         }
                     }
                 }
             }
-
         } catch (SQLException e) {
             e.printStackTrace();
-        } catch (NumberFormatException e) {
-            System.out.println("Invalid input. Please enter valid numbers.");
         }
+        return false;
     }
 
 
