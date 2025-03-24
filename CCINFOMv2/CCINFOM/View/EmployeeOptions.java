@@ -15,11 +15,11 @@ import javax.swing.*;
 public class EmployeeOptions extends JFrame {
     public static void showOptions() {
         JFrame frame = new JFrame("Employee Options");
-        frame.setSize(400, 400);
+        frame.setSize(400, 450);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         
         JPanel panel = new JPanel();
-        panel.setLayout(new GridLayout(7, 1, 10, 10));
+        panel.setLayout(new GridLayout(8, 1, 10, 10));
 
         JButton addLoanButton = new JButton("Add Loan Options");
         JButton viewAccountTypesButton = new JButton("View Account Types");
@@ -28,7 +28,8 @@ public class EmployeeOptions extends JFrame {
         JButton viewLoanHistoryButton = new JButton("View Loan Payment History");
         JButton viewAnnualTransactionButton = new JButton("View Annual Transaction Volume");
         JButton viewAnnualLoanButton = new JButton("View Annual Loan Payment Volume");
-        
+        JButton transactionHistoryReportButton = new JButton("Transaction & Loan Report");  // New button for GUI
+
         addLoanButton.addActionListener(e -> addLoanOptions());
         viewAccountTypesButton.addActionListener(e -> AccountType.showAccountTypes());
         viewCustomersButton.addActionListener(e -> EmployeeOptions.showCustomersOfBank());
@@ -36,7 +37,8 @@ public class EmployeeOptions extends JFrame {
         viewLoanHistoryButton.addActionListener(e -> TransactionHistory.viewLoanPaymentHistoryOfAccount());
         viewAnnualTransactionButton.addActionListener(e -> TransactionHistory.generateAnnualTransaction());
         viewAnnualLoanButton.addActionListener(e -> TransactionHistory.generateAnnualLoanPayment());
-        
+        transactionHistoryReportButton.addActionListener(e -> new TransactionHistoryGUI());  // Opens GUI
+
         panel.add(addLoanButton);
         panel.add(viewAccountTypesButton);
         panel.add(viewCustomersButton);
@@ -44,7 +46,8 @@ public class EmployeeOptions extends JFrame {
         panel.add(viewLoanHistoryButton);
         panel.add(viewAnnualTransactionButton);
         panel.add(viewAnnualLoanButton);
-        
+        panel.add(transactionHistoryReportButton);
+
         frame.add(panel);
         frame.setVisible(true);
     }
@@ -69,6 +72,7 @@ public class EmployeeOptions extends JFrame {
             }
         }
     }
+    
     public static void showCustomersOfBank(){
         try {
             Connection connection = DriverManager.getConnection(
@@ -91,37 +95,30 @@ public class EmployeeOptions extends JFrame {
 
             int chosenOption;
             do {
-                System.out.print("Choose cutomer record to view information: ");
+                System.out.print("Choose customer record to view information: ");
                 chosenOption = Integer.parseInt(UserInput.getScanner().nextLine());
             } while( chosenOption < 1 || chosenOption > option -1);
-
 
             String viewQuery = "SELECT * FROM customer_records WHERE customer_records = ?";
 
             try(PreparedStatement statement = connection.prepareStatement(viewQuery)){
                 statement.setString(1, types[chosenOption - 1]);
-
                 ResultSet typeRes = statement.executeQuery();
 
                 if(typeRes.next()){
                     System.out.println("Customer_ID: " + typeRes.getString("customer_ID"));
-                    System.out.println("First Name: " + typeRes.getDouble("first_name"));
-                    System.out.println("Last Name: " + typeRes.getDouble("last_name"));
+                    System.out.println("First Name: " + typeRes.getString("first_name"));
+                    System.out.println("Last Name: " + typeRes.getString("last_name"));
                     System.out.println("Birth Date: " + typeRes.getString("birthdate"));
-                    System.out.println("Phone No: " + typeRes.getDouble("phone_number"));
-                    System.out.println("Email Address: " + typeRes.getDouble("email_address"));
-
-
+                    System.out.println("Phone No: " + typeRes.getString("phone_number"));
+                    System.out.println("Email Address: " + typeRes.getString("email_address"));
                 } else {
                     System.out.println("Customer record doesn't exist");
                 }
             }
-
-
         } catch (SQLException e){
             e.printStackTrace();
             JOptionPane.showMessageDialog(null, "Database connection failed: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
-
 }
