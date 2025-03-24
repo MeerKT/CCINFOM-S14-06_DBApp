@@ -1,6 +1,7 @@
 package Model;
 
 import HelperClass.UserInput;
+
 import java.sql.*;
 
 public class AccountType {
@@ -8,7 +9,7 @@ public class AccountType {
     public static void showAccountTypes(){
         try {
             Connection connection = DriverManager.getConnection(
-                    "jdbc:mysql://localhost:3306/dbapp_bankdb",
+                    "jdbc:mysql://localhost:3307/dbapp_bankdb",
                     "root",
                     "1234"
             );
@@ -74,7 +75,7 @@ public class AccountType {
     public static void changeInterestRate(String accType){
         try {
             Connection connection = DriverManager.getConnection(
-                    "jdbc:mysql://localhost:3306/dbapp_bankdb",
+                    "jdbc:mysql://localhost:3307/dbapp_bankdb",
                     "root",
                     "1234"
             );
@@ -102,7 +103,7 @@ public class AccountType {
     public static void changeMinimumBalance(String accType){
         try {
             Connection connection = DriverManager.getConnection(
-                    "jdbc:mysql://localhost:3306/dbapp_bankdb",
+                    "jdbc:mysql://localhost:3307/dbapp_bankdb",
                     "root",
                     "1234"
             );
@@ -130,7 +131,7 @@ public class AccountType {
     public static void addDefaultAccountTypes(){
         try {
         Connection connection = DriverManager.getConnection(
-                    "jdbc:mysql://localhost:3306/dbapp_bankdb",
+                    "jdbc:mysql://localhost:3307/dbapp_bankdb",
                     "root",
                     "1234"
         );
@@ -148,21 +149,21 @@ public class AccountType {
         ResultSet results3 = statement3.executeQuery(check3);
 
         if(!results1.next()) {
-            String Personal = "INSERT INTO account_type (account_type, interest_rate, min_balance) " +
+            String checkings = "INSERT INTO account_type (account_type, interest_rate, min_balance) " +
                     "VALUES ('Personal', 1.5, 5000)";
-            statement1.executeUpdate(Personal);
+            statement1.executeUpdate(checkings);
         }
 
         if(!results2.next()) {
-            String Business = "INSERT INTO account_type (account_type, interest_rate, min_balance) " +
+            String passbook = "INSERT INTO account_type (account_type, interest_rate, min_balance) " +
                     "VALUES ('Business', 0.8, 30000)";
-            statement2.executeUpdate(Business);
+            statement2.executeUpdate(passbook);
         }
 
         if(!results3.next()) {
-            String Special = "INSERT INTO account_type (account_type, interest_rate, min_balance) " +
+            String savings = "INSERT INTO account_type (account_type, interest_rate, min_balance) " +
                     "VALUES ('Special', 2.5, 50000)";
-            statement3.executeUpdate(Special);
+            statement3.executeUpdate(savings);
         }
 
     } catch(SQLException e){
