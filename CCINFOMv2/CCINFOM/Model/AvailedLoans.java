@@ -1,8 +1,7 @@
 package Model;
+import HelperClass.UserInput;
 import java.sql.*;
 import java.time.LocalDate;
-
-import HelperClass.UserInput;
 
 public class AvailedLoans {
 
@@ -16,7 +15,7 @@ public class AvailedLoans {
     public static void showAvailedLoans (int customer_id){
         try {
             Connection connection = DriverManager.getConnection(
-                    "jdbc:mysql://localhost:3307/dbapp_bankdb",
+                    "jdbc:mysql://localhost:3306/dbapp_bankdb",
                     "root",
                     "1234"
             );
@@ -56,7 +55,7 @@ public class AvailedLoans {
     public static void loanAppli(int customer_id){
         try {
             Connection connection = DriverManager.getConnection(
-                    "jdbc:mysql://localhost:3307/dbapp_bankdb",
+                    "jdbc:mysql://localhost:3306/dbapp_bankdb",
                     "root",
                     "1234"
                     );
@@ -216,7 +215,7 @@ public class AvailedLoans {
 
         try {
             Connection connection = DriverManager.getConnection(
-                    "jdbc:mysql://localhost:3307/dbapp_bankdb",
+                    "jdbc:mysql://localhost:3306/dbapp_bankdb",
                     "root",
                     "1234"
             );
@@ -365,7 +364,7 @@ public class AvailedLoans {
 
         try {
             Connection connection = DriverManager.getConnection(
-                    "jdbc:mysql://localhost:3307/dbapp_bankdb",
+                    "jdbc:mysql://localhost:3306/dbapp_bankdb",
                     "root",
                     "1234"
             );
