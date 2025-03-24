@@ -4,7 +4,7 @@ import java.sql.*;
 import java.text.DecimalFormat;
 
 public class InterestCalculator {
-    private String url = "jdbc:mysql://localhost:3307/bankdb";
+    private String url = "jdbc:mysql://localhost:3306/bankdb";
     private String user = "root";
     private String password = "1234";
 
