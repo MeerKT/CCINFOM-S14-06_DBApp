@@ -1,9 +1,8 @@
 package Model;
 
+import HelperClass.UserInput;
 import java.sql.*;
 import java.util.Date;
-
-import HelperClass.UserInput;
 
 public class Customer {
     private int customer_id;
@@ -22,7 +21,7 @@ public class Customer {
 
     public static boolean signUp(String firstName, String lastName, String phone, String email, String dob) {
         try (Connection con = DriverManager.getConnection(
-                    "jdbc:mysql://localhost:3307/dbapp_bankdb",
+                    "jdbc:mysql://localhost:3306/dbapp_bankdb",
                     "root",
                     "1234")) {
 
@@ -58,7 +57,7 @@ public class Customer {
     }
 
     public static Customer login(String firstName, String lastName) {
-        try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3307/dbapp_bankdb", "root", "1234")) {
+        try (Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/dbapp_bankdb", "root", "1234")) {
             String checkQuery = "SELECT * FROM customer_records WHERE first_name = ? AND last_name = ?";
             try (PreparedStatement statement = con.prepareStatement(checkQuery)) {
                 statement.setString(1, firstName);
